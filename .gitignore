@@ -1,4 +1,6 @@
 backups
+database.sqlite
+database.sqlite-*
 
 # Logs
 logs
