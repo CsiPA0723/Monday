@@ -1,6 +1,4 @@
 import { DataTypes, ModelAttributes } from "../types";
-import Sqlite from "better-sqlite3";
-import getTableCreateString from "../../../utils/getTableCreateString";
 
 export interface NoteAttributes {
     id: string;
@@ -10,7 +8,7 @@ export interface NoteAttributes {
     updatedAt: Date;
 }
 
-const NoteModel: ModelAttributes = {
+export const NoteModel: ModelAttributes = {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -37,12 +35,3 @@ const NoteModel: ModelAttributes = {
         allowNull: false
     }
 };
-
-
-export function NoteFactory(database: Sqlite.Database) {
-    const Table = database.prepare("SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = 'notes';").get();
-    
-    if(!Table['count(*)']) {
-        database.prepare(`CREATE TABLE notes (${getTableCreateString(NoteModel).join(', ')});`).run();
-    }
-}

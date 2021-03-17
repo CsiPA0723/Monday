@@ -19,6 +19,5 @@ export default function getTableCreateString(modelAttributes: ModelAttributes) {
         }
     }
     if(foreignString.length > 0) tableArrString.push(foreignString);
-    console.log(tableArrString.join(", "));
     return tableArrString;
 }

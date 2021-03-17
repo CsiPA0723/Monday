@@ -1,26 +1,33 @@
 import Sqlite from "better-sqlite3";
 import path from "path";
-import { UserAttributes, UserFactory } from "./models/user";
-import { NoteAttributes, NoteFactory } from "./models/note";
+import { UserAttributes, UserModel } from "./models/user";
+import { NoteAttributes, NoteModel } from "./models/note";
 import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
 import formatDate from "../../utils/formatDate";
+import getTableCreateString from "../../utils/getTableCreateString";
+import { ModelAttributes } from "./types";
 
 export const database = new Sqlite(path.join(__dirname, "database.sqlite"), { verbose: console.log });
-database.pragma("synchronous = 1");
-database.pragma("journal_mode = wal");
-database.pragma("foreign_keys = 1");
+export function init() {
+    database.pragma("synchronous = 1");
+    database.pragma("journal_mode = wal");
+    database.pragma("foreign_keys = 1");
+    
+    TableFactory("users", UserModel);
+    TableFactory("notes", NoteModel);
+}
 
-UserFactory(database);
-NoteFactory(database);
+function TableFactory(tableName: "users" | "notes", model: ModelAttributes ): void {
+    const Table = database.prepare(`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = '${tableName}';`).get();
+    if(!Table['count(*)']) database.prepare(`CREATE TABLE ${tableName} (${getTableCreateString(model).join(', ')});`).run();
+}
 
 export function testConnection() {
     const stmt = database.prepare("SELECT 1+1 as test;").get();
     if(stmt && stmt["test"] === 2) console.log("Connection estableshed successfuly!");
     else console.error(new Error("Something went wrong while testing database connection!"));
 }
-
-createUser("Test", "asd", false);
 
 export function createUser(username: string, password: string, rememberMe: boolean) {
     const id = uuidv4();
@@ -50,5 +57,6 @@ export function deleteDataByPk(tableName: string, primaryKey: string): any {
 
 export default {
     database,
+    init,
     testConnection
 };
