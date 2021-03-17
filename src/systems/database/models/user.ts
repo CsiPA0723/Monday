@@ -9,7 +9,7 @@ export interface UserAttributes {
     updatedAt: Date;
 };
 
-export const UserModel: ModelAttributes = {
+export const UserModel: ModelAttributes<UserAttributes> = {
     id: {
         type: DataTypes.UUIDV4,
         primaryKey: true

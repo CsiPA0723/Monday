@@ -8,7 +8,7 @@ export interface NoteAttributes {
     updatedAt: Date;
 }
 
-export const NoteModel: ModelAttributes = {
+export const NoteModel: ModelAttributes<NoteAttributes> = {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,

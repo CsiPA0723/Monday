@@ -1,6 +1,6 @@
 import { DataTypes, ModelAttributes } from "../systems/database/types";
 
-export default function getTableCreateString(modelAttributes: ModelAttributes) {
+export default function getTableCreateString(modelAttributes: ModelAttributes<any>) {
     let tableArrString: string[] = [];
     let foreignString: string = "";
     for (const key in modelAttributes) {

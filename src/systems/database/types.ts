@@ -8,8 +8,8 @@ export enum DataTypes {
     BLOB = "BLOB"
 };
 
-export type ModelAttributes = {
-    [key: string]: {
+export type ModelAttributes<T> = {
+    [Property in keyof T]: {
         type: DataTypes;
         primaryKey?: boolean;
         allowNull?: boolean;
