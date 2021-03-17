@@ -1,76 +1,88 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+import { app, BrowserWindow, ipcMain } from "electron";
+import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
+
+const debug = /--debug/.test(process.argv[2]); // npm run debug
+const dev = /--dev/.test(process.argv[3]); // npm run debug:dev
+
+import { database, testConnection } from "./systems/database";
+import { UserAttributes } from "./systems/database/models/user";
+import "./eventHandlers";
 
 let mainWindow: BrowserWindow;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
-  app.quit();
+if (require("electron-squirrel-startup")) {
+    // eslint-disable-line global-require
+    app.quit();
 }
 
-ipcMain.on("closeActiveWindow", () => {
-  BrowserWindow.getFocusedWindow()?.close();
+let activeUserUUID: string;
+
+ipcMain.on("getActiveUser", async (event) => {
+    try {
+        const user = <UserAttributes>database.prepare("SELECT * FROM users WHERE id = ?;").get(activeUserUUID);
+        if(!user) throw new Error("Active user cannot be found inside database");
+        event.reply("getActiveUser", user);
+    } catch (error) {
+        console.error(error);
+    }
 });
 
-ipcMain.on("maximizeActiveWindow", () => {
-  const window = BrowserWindow.getFocusedWindow();
-  if(!window) return;
-  if(!window.isMaximized()) window.maximize();
-  else window.unmaximize();
-});
-
-ipcMain.on("minimizeActiveWindow", () => {
-  BrowserWindow.getFocusedWindow()?.minimize();
+ipcMain.on("setActiveUser", async (event, userUUID) => {
+    activeUserUUID = userUUID;
 });
 
 const createWindow = (): void => {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
-    frame: false,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      enableRemoteModule: false,
-      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
-    }
-  });
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+        height: 600,
+        width: 800,
+        frame: debug ? true : false,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            enableRemoteModule: false,
+            preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+        },
+    });
 
-  // and load the index.html of the app.
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+    // and load the index.html of the app.
+    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+    // Open the DevTools.
+    if (debug && dev) mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
-  createWindow();
-  installExtension(REACT_DEVELOPER_TOOLS)
-    .then((name: string) => console.log(`Added Extension:  ${name}`))
-    .catch((err: Error) => console.log('An error occurred: ', err));
+app.on("ready", () => {
+    testConnection();
+    
+    createWindow();
+
+    installExtension(REACT_DEVELOPER_TOOLS)
+        .then((name: string) => console.log(`Added Extension:  ${name}`))
+        .catch((err: Error) => console.log("An error occurred: ", err));
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+        app.quit();
+    }
 });
 
-app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+app.on("activate", () => {
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+    }
 });
 
 // In this file you can include the rest of your app's specific main process

@@ -13,17 +13,17 @@ function Headbar() {
                     </g>
                 </svg>
             </div>
-            <div id="close-btn" onClick={() => window.api.closeActiveWindow()} className="title-button">
+            <div id="close-btn" onClick={() => window.headbar.closeActiveWindow()} className="title-button">
                 <svg aria-hidden="false" width="12" height="12" viewBox="0 0 12 12">
                     <polygon fill="currentColor" fillRule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon>
                 </svg>
             </div>
-            <div id="max-btn" onClick={() => window.api.maximizeActiveWindow()} className="title-button">
+            <div id="max-btn" onClick={() => window.headbar.maximizeActiveWindow()} className="title-button">
                 <svg aria-hidden="false" width="12" height="12" viewBox="0 0 12 12">
                     <rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="currentColor"></rect>
                 </svg>
             </div>
-            <div id="min-btn" onClick={() => window.api.minimizeActiveWindow()} className="title-button">
+            <div id="min-btn" onClick={() => window.headbar.minimizeActiveWindow()} className="title-button">
                 <svg aria-hidden="false" width="12" height="12" viewBox="0 0 12 12">
                     <rect fill="currentColor" width="10" height="1" x="1" y="6"></rect>
                 </svg>
