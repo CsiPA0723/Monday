@@ -1,0 +1,39 @@
+@use "colors";
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 100px;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  background-color: colors.$sidebar-bg;
+
+  button {
+    display: block;
+    width: 100%;
+    background-color: colors.$button-bg;
+    color: colors.$button;
+    padding: 16px;
+    border: none;
+    outline: none;
+  }
+  button.active {
+    background-color: colors.$button-active-bg;
+  }
+  button:hover:not(.active) {
+    background-color: colors.$button-hover-bg;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  div#content {
+    margin-left: 0;
+  }
+}

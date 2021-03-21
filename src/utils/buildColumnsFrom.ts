@@ -1,14 +1,15 @@
-import { DataTypes, ModelAttributes } from "../systems/database/types";
+import { DataTypes, ModelAttributes } from "../systems/database/datatypes";
 
-export default function getTableCreateString(modelAttributes: ModelAttributes<any>) {
+export default function buildColumnsFrom(modelAttributes: ModelAttributes<any>) {
     let tableArrString: string[] = [];
-    let foreignString: string = "";
+    let foreignString: string = null;
     for (const key in modelAttributes) {
         if (Object.prototype.hasOwnProperty.call(modelAttributes, key)) {
-            const { type, allowNull, defaultValue, primaryKey, autoIncrement, references } = modelAttributes[key];
+            const { type, allowNull, defaultValue, primaryKey, autoIncrement, unique, references } = modelAttributes[key];
             let string = `${key} ${type}`;
             if(primaryKey) string += " PRIMARY KEY";
             if((autoIncrement || primaryKey) && type === DataTypes.INTEGER) string += " AUTOINCREMENT";
+            if(unique) string += "UNIQUE";
             if(!allowNull) string += " NOT NULL";
             if(defaultValue !== undefined && defaultValue !== null) string += ` DEFAULT(${defaultValue})`;
             if(references) {
@@ -18,6 +19,6 @@ export default function getTableCreateString(modelAttributes: ModelAttributes<an
             tableArrString.push(string);
         }
     }
-    if(foreignString.length > 0) tableArrString.push(foreignString);
+    if(foreignString !== null) tableArrString.push(foreignString);
     return tableArrString;
 }

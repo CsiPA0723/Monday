@@ -1,0 +1,116 @@
+@use "colors";
+
+div.login {
+  button {
+    display: block;
+    margin: 20px 0;
+    background-color: transparent;
+    color: colors.$button-hover-bg;
+    border: 0;
+    padding: 20px;
+    font-size: 0.5rem;
+    text-decoration: underline;
+    outline: none;
+  }
+
+  form {
+    max-width: 450px;
+    margin: 0 auto;
+    text-align: center;
+
+    // positioning context
+    > div {
+      position: relative;
+      border-bottom: 1px solid #ccc;
+
+      // Looks like placeholder
+      > label:not([for="remember_me"]) {
+        opacity: 0.3;
+        font-weight: bold;
+        position: absolute;
+        top: 22px;
+        left: 20px;
+        color: colors.$text;
+      }
+
+      > input[type="text"],
+      > input[type="password"] {
+        width: 100%;
+        border: 0;
+        padding: 20px 20px 20px 50px;
+        background: colors.$background;
+        color: colors.$text;
+
+        &:focus {
+          // removing default focus style
+          outline: 0;
+
+          & + label {
+            opacity: 0;
+          }
+        }
+
+        &:valid {
+          background: url(../svgs/check.svg);
+          background-size: 20px;
+          background-repeat: no-repeat;
+          background-position: 20px 20px;
+
+          & + label {
+            opacity: 0;
+          }
+        }
+
+        &:invalid:not(:focus):not(:placeholder-shown) {
+          background: url(../svgs/error.svg);
+          background-size: 20px;
+          background-repeat: no-repeat;
+          background-position: 20px 20px;
+
+          & + label {
+            opacity: 0;
+          }
+        }
+
+        &:invalid:focus:not(:placeholder-shown) {
+          & ~ .requirements {
+            max-height: 200px;
+            padding: 0 30px 20px 50px;
+          }
+        }
+      }
+
+      .requirements {
+        padding: 0 30px 0 50px;
+        max-height: 0;
+        transition: 0.28s;
+        overflow: hidden;
+        color: colors.$error-text;
+        font-style: italic;
+      }
+    }
+
+    :last-child {
+      border-bottom: none;
+    }
+
+    input[type="submit"] {
+      display: block;
+      width: 100%;
+      margin: 20px 0;
+      background: colors.$button-active-bg;
+      color: colors.$button;
+      border: 0;
+      padding: 20px;
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: x-small;
+    }
+  }
+}
+
+* {
+  box-sizing: border-box;
+}

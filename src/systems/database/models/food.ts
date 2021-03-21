@@ -1,6 +1,6 @@
-import { DataTypes, ModelAttributes } from "../types";
+import { BuildStatic, DataTypes, Model } from "../datatypes";
 
-export interface FoodAttributes {
+type FoodAttributes = {
     id: number;
     name: string;
     amount: string;
@@ -8,46 +8,47 @@ export interface FoodAttributes {
     fat: number;
     carbonhydrate: number;
     protein: number;
-    createdAt: Date;
-    updatedAt: Date;
 };
 
-export const FoodModel: ModelAttributes<FoodAttributes> = {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    name: {
-        type: DataTypes.TEXT,
-        allowNull: false
-    },
-    amount: {
-        type: DataTypes.TEXT,
-        allowNull: false
-    },
-    calories: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    fat: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    carbonhydrate: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    protein: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    createdAt: {
-        type: DataTypes.DATETIME,
-        allowNull: false
-    },
-    updatedAt: {
-        type: DataTypes.DATETIME,
-        allowNull: false
+export type FoodStatic = BuildStatic<FoodAttributes>;
+
+class FoodModel extends Model<FoodAttributes> {
+    public readonly tableName = "foods";
+    public readonly model = {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        amount: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        calories: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        fat: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        carbonhydrate: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        protein: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
+    };
+    
+    public create() {
+       throw new Error("Not implemented yet!");
     }
-};
+}
+
+export const FoodFactory = new FoodModel();

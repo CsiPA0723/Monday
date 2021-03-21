@@ -6,8 +6,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 const debug = /--debug/.test(process.argv[2]); // npm run debug
 const dev = /--dev/.test(process.argv[3]); // npm run debug:dev
 
-import Database, { createUser, getDataByPk } from "./systems/database";
-import { UserAttributes } from "./systems/database/models/user";
+import Database, { User } from "./systems/database";
 import "./eventHandlers";
 
 let mainWindow: BrowserWindow;
@@ -22,7 +21,7 @@ let activeUserUUID: string;
 
 ipcMain.on("getActiveUser", async (event) => {
     try {
-        const user = getDataByPk("users", activeUserUUID);
+        const user = User.findByPk(activeUserUUID);
         if(!user) throw new Error("Active user cannot be found inside database");
         event.reply("getActiveUser", user);
     } catch (error) {
@@ -30,7 +29,7 @@ ipcMain.on("getActiveUser", async (event) => {
     }
 });
 
-ipcMain.on("setActiveUser", async (event, userUUID) => {
+ipcMain.on("setActiveUser", async (_, userUUID: string) => {
     activeUserUUID = userUUID;
 });
 
@@ -46,6 +45,7 @@ const createWindow = (): void => {
             enableRemoteModule: false,
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         },
+        backgroundColor: "#363544"
     });
 
     // and load the index.html of the app.
@@ -59,10 +59,9 @@ const createWindow = (): void => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
-    Database.init();
     Database.testConnection();
 
-    if(debug) createUser("Test", "asd", false);
+    if(debug) User.create("Test", "asd", false);
     
     createWindow();
 

@@ -1,5 +1,5 @@
 import React from "react";
-import "./headbar.css";
+import "../../assets/scss/headbar.scss";
 
 function Headbar() {
     return (

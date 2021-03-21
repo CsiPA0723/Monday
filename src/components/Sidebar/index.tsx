@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import "./sidebar.css";
+import "../../assets/scss/sidebar.scss";
 
 type SideBarProps = {
   view: string,
-  setView: React.Dispatch<React.SetStateAction<string>>
+  setView: (viewName: string) => void;
 };
 
 function SideBar({ view, setView }: SideBarProps) {

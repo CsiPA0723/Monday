@@ -1,25 +1,26 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 declare global {
-    interface Window { login: {
-        authenticate: (username: string, password: string, rememberMe: boolean) => void
-        onAuthenticated: (func: Function) => void,
-        tryRememberMe: () => void
-    }; }
+    interface Window { login: typeof login }
 }
 
-contextBridge.exposeInMainWorld("login", {
-    authenticate(username: string, password: string, rememberMe: boolean) {
-        ipcRenderer.send("authenticated", username, password, rememberMe);
-    },
+const validSendChannels = ["authenticate", "registerUser", "tryRememberMe"] as const;
+const validOnChannels = ["authenticated", "registerUser"] as const;
 
-    onAuthenticated(func: Function) {
-        ipcRenderer.on("authenticated", (event, isAuthenticated: boolean) => {
-            if(isAuthenticated) func();
-            else alert("Username or Password not matching");
-        });
+
+const login = {
+    send(channel: typeof validSendChannels[number], ...args: any[]) {
+        if(!validSendChannels.includes(channel)) return;
+        ipcRenderer.send(channel, ...args);
     },
-    tryRememberMe() {
-        ipcRenderer.send("tryRememberMe");
+    on(channel: typeof validOnChannels[number], callback: (...args: any[]) => void) {
+        if(!validOnChannels.includes(channel)) return;
+        ipcRenderer.on(channel, callback);
+    },
+    off(channel: typeof validOnChannels[number], callback: (...args: any[]) => void) {
+        if(!validOnChannels.includes(channel)) return;
+        ipcRenderer.off(channel, callback);
     }
-});
+};
+
+contextBridge.exposeInMainWorld("login", login);

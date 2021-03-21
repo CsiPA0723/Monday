@@ -1,38 +1,61 @@
-import { DataTypes, ModelAttributes } from "../types";
+import { BuildStatic, DataTypes, Model } from "../datatypes";
+import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
+import formatDate from "../../../utils/formatDate";
+import randomBackupCode from "../../../utils/randomBackupCode";
 
-export interface UserAttributes {
+type UserAttributes = {
     id: string;
     username: string;
     password: Buffer;
-    rememberMe: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    rememberMe: number;
+    backupCode: string;
 };
 
-export const UserModel: ModelAttributes<UserAttributes> = {
-    id: {
-        type: DataTypes.UUIDV4,
-        primaryKey: true
-    },
-    username: {
-        type: DataTypes.TEXT,
-        allowNull: false
-    },
-    password: {
-        type: DataTypes.BLOB,
-        allowNull: false
-    },
-    rememberMe: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-    },
-    createdAt: {
-        type: DataTypes.DATETIME,
-        allowNull: false
-    },
-    updatedAt: {
-        type: DataTypes.DATETIME,
-        allowNull: false
+export type UserStatic = BuildStatic<UserAttributes>;
+
+class UserModel extends Model<UserAttributes> {
+    public readonly tableName = "users";
+    public readonly model = {
+        id: {
+            type: DataTypes.UUIDV4,
+            primaryKey: true
+        },
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
+        },
+        password: {
+            type: DataTypes.BUFFER,
+            allowNull: false
+        },
+        rememberMe: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        },
+        backupCode: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        }
+    };
+    
+    public create(username: string, password: string, rememberMe?: boolean) {
+        const id = uuidv4();
+        const user: UserStatic = {
+            id: id,
+            username: username,
+            password: crypto.pbkdf2Sync(password, id, 1000, 512, "sha512"),
+            rememberMe: rememberMe ? 1 : 0,
+            backupCode: randomBackupCode(),
+            createdAt: formatDate(),
+            updatedAt: formatDate()
+        };
+        const stmt = this.database.prepare(`INSERT INTO users VALUES (@${Object.getOwnPropertyNames(user).join(", @")});`);
+        stmt.run(user);
+        return user;
     }
-};
+}
+
+export const UserFactory = new UserModel();

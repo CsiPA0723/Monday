@@ -1,32 +1,124 @@
-import React from "react";
-import "./login.css";
+import React, { useEffect, useState } from "react";
+import "../../assets/scss/login.scss";
 
 function Login() {
-  window.login.tryRememberMe();
+  const [details, setDetails] = useState({
+    username: "",
+    password: "",
+    rememberMe: false,
+  });
 
-  return (
-    <div id="login">
-      <h1>Login</h1>
-      <label>Username</label><br />
-      <input type="username" id="username" placeholder="username" /><br />
-      <label>Password</label><br />
-      <input type="password" id="password" placeholder="password" /><br />
-      <input type="checkbox" id="remember_me" /><label>Remember me</label><br />
-      <p>(Only check if you are this computer sole user!)</p>
-      <br />
-      <button
-        onClick={() => {
-          const userame = (document.getElementById("username") as HTMLInputElement);
-          const password = (document.getElementById("password") as HTMLInputElement);
-          const rememberMe = (document.getElementById("remember_me") as HTMLInputElement);
-          console.log(rememberMe.checked);
-          window.login.authenticate(userame.value, password.value, rememberMe.checked);
-        }}
-      >
-        Login
-      </button>
-    </div>
-  )
+  const [loginOrRegist, setLoginOrRegist] = useState<"login" | "regist">("login");
+
+  useEffect(() => {
+    function initLogin() {
+      setLoginOrRegist("login");
+    }
+
+    window.login.on("registerUser", initLogin);
+    
+    return () => {
+      window.login.off("registerUser", initLogin);
+    }
+  }, []);
+
+  if (loginOrRegist === "login") {
+    return (
+      <div className="login">
+        <button onClick={() => {
+          setLoginOrRegist("regist");
+        }}>
+          To Register
+        </button>
+        <h1>Login</h1>
+        <form onSubmit={(e) => {
+            e.preventDefault();
+            const { username, password, rememberMe } = details;
+            window.login.send("authenticate", username, password, rememberMe ? 1 : 0);
+        }}>
+          <div>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder=" "
+              required
+              onChange={(e) => setDetails({ ...details, username: e.target.value })}
+            />
+            <label htmlFor="username">Username</label>
+          </div>
+          <div>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder=" "
+              required
+              onChange={(e) => setDetails({ ...details, password: e.target.value })}
+            />
+            <label htmlFor="password">Password</label>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              id="remember_me"
+              name="remember_me"
+              onChange={(e) => setDetails({ ...details, rememberMe: e.target.checked })}
+            />
+            <label htmlFor="remember_me">Remember me</label>
+            <p>(Only check if you are this computer sole user!)</p>
+          </div>
+
+          <input type="submit" value="Login" />
+        </form>
+      </div>
+    );
+  } else if (loginOrRegist === "regist") {
+    return (
+      <div className="login">
+        <button onClick={() => {
+          setLoginOrRegist("login");
+        }}>
+          To Login
+        </button>
+        <h1>Register</h1>
+        <form onSubmit={(e) => {
+            e.preventDefault();
+            const { username, password } = details;
+            window.login.send("registerUser", username, password);
+        }}>
+          <div>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder=" "
+              required
+              onChange={(e) => setDetails({ ...details, username: e.target.value })}
+            />
+            <label htmlFor="username">Username</label>
+          </div>
+          <div>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder=" "
+              required
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+              onChange={(e) => setDetails({ ...details, password: e.target.value })}
+            />
+            <label htmlFor="password">Password</label>
+            <div className="requirements">
+              Your password must be at least 6 characters as well as contain at
+              least one uppercase, one lowercase, and one number.
+            </div>
+          </div>
+          <input type="submit" value="Register" />
+        </form>
+      </div>
+    );
+  }
 }
 
 export default Login;

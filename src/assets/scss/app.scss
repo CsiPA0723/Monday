@@ -1,8 +1,10 @@
+@use "colors";
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: auto;
-  color: #fff;
-  background-color: #363544;
+  color: colors.$text;
+  background-color: colors.$background;
 }
 
 div#content {

@@ -1,0 +1,42 @@
+@use "colors";
+
+.headbar {
+  display: block;
+  width: 100%;
+  background-color: colors.$headbar-bg;
+  overflow: auto;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-app-region: drag;
+
+  .title {
+    color: colors.$title;
+    padding: 1px 4px;
+    float: left;
+  }
+
+  .title-button {
+    padding: 1px 10px;
+    float: right;
+    color: colors.$title-button;
+    -webkit-app-region: no-drag;
+  }
+
+  .title-button:hover {
+    color: colors.$title-button-hover;
+    background-color: colors.$title-button-hover-bg;
+  }
+  #close-btn:hover {
+    color: colors.$title-button-hover;
+    background-color: colors.$title-close-button-hover-bg;
+  }
+
+  .title-button:active {
+    color: colors.$title-button-active;
+    background-color: colors.$title-button-active-bg;
+  }
+  #close-btn:active {
+    color: colors.$title-button-active;
+    background-color: colors.$title-close-button-active-bg;
+  }
+}
