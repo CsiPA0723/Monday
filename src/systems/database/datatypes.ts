@@ -1,5 +1,6 @@
 import Sqlite from "better-sqlite3";
 import buildColumnsFrom from "../../utils/buildColumnsFrom";
+import buildUpdateSetsFrom from "../../utils/buildUpdateSetsFrom";
 
 export enum DataTypes {
     BOOLEAN = "INTEGER",
@@ -45,6 +46,9 @@ const BasicModel: ModelAttributes<BasicAttributes> = {
     }
 }
 
+type MustAtUpdate = { id:string|number, updatedAt: string };
+type MakeSomePartials<T> = Omit<BuildStatic<T>, keyof Omit<BuildStatic<T>, keyof MustAtUpdate>> & Partial<Omit<BuildStatic<T>, keyof MustAtUpdate>>;
+
 export abstract class Model<T> {
     public abstract tableName: string;
     public abstract model: ModelAttributes<T>;
@@ -53,18 +57,25 @@ export abstract class Model<T> {
 
     private isNotDefined = true;
 
-    public findByPk(primaryKey: string | number) {
+    public findByPk(primaryKey: string | number): BuildStatic<T> {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         return this.database.prepare("SELECT * FROM ? WHERE id = ?;").get(this.tableName, primaryKey);
     }
 
-    public deleteByPk(tableName: string, primaryKey: string): any {
+    public deleteByPk(primaryKey: string): any {
         if(this.isNotDefined) throw new Error("Model is not defined!");
-        return this.database.prepare("DELETE FROM ? WHERE id = ?;").run(tableName, primaryKey);
+        return this.database.prepare("DELETE FROM ? WHERE id = ?;").run(this.tableName, primaryKey);
+    }
+
+    public update(data: MakeSomePartials<T>|MustAtUpdate): any {
+        if(this.isNotDefined) throw new Error("Model is not defined!");
+        const { id, ...restData } = (data as MustAtUpdate);
+        const stmt = this.database.prepare(`UPDATE ${this.tableName} SET ${buildUpdateSetsFrom(restData)} WHERE id = ?`);
+        return stmt.run(restData, id);
     }
 
     public define(database: Sqlite.Database) {
-        if(!this.isNotDefined) return;
+        if(!this.isNotDefined) throw new Error("Model alredy defined!");
         this.database = database;
         Object.assign(this.model, BasicModel);
 

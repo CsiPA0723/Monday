@@ -1,4 +1,4 @@
-import { BuildStatic, DataTypes, Model } from "../datatypes";
+import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
 import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
 import formatDate from "../../../utils/formatDate";
@@ -16,7 +16,7 @@ export type UserStatic = BuildStatic<UserAttributes>;
 
 class UserModel extends Model<UserAttributes> {
     public readonly tableName = "users";
-    public readonly model = {
+    public readonly model = <ModelAttributes<UserAttributes>>{
         id: {
             type: DataTypes.UUIDV4,
             primaryKey: true

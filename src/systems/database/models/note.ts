@@ -1,4 +1,4 @@
-import { BuildStatic, DataTypes, Model } from "../datatypes";
+import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
 
 type NoteAttributes = {
     id: string;
@@ -11,7 +11,7 @@ export type NoteStatic = BuildStatic<NoteAttributes>;
 
 class NoteModel extends Model<NoteAttributes> {
     public readonly tableName = "notes";
-    public readonly model = {
+    public readonly model = <ModelAttributes<NoteAttributes>>{
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,

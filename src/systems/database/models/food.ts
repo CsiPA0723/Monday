@@ -1,4 +1,4 @@
-import { BuildStatic, DataTypes, Model } from "../datatypes";
+import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
 
 type FoodAttributes = {
     id: number;
@@ -14,7 +14,7 @@ export type FoodStatic = BuildStatic<FoodAttributes>;
 
 class FoodModel extends Model<FoodAttributes> {
     public readonly tableName = "foods";
-    public readonly model = {
+    public readonly model = <ModelAttributes<FoodAttributes>>{
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,

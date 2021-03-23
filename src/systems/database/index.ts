@@ -1,6 +1,7 @@
 import Sqlite from "better-sqlite3";
 import path from "path";
 import { UserFactory } from "./models/user";
+import { UserSettingsFactory } from "./models/user_settings";
 import { NoteFactory } from "./models/note";
 import { FoodFactory } from "./models/food";
 
@@ -21,5 +22,6 @@ export default {
 };
 
 export const User = UserFactory.define(database);
+export const UserSettings = UserSettingsFactory.define(database);
 export const Note = NoteFactory.define(database);
 export const Food = FoodFactory.define(database);

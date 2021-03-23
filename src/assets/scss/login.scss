@@ -1,22 +1,29 @@
 @use "colors";
 
 div.login {
-  button {
-    display: block;
-    margin: 20px 0;
-    background-color: transparent;
-    color: colors.$button-hover-bg;
-    border: 0;
-    padding: 20px;
-    font-size: 0.5rem;
-    text-decoration: underline;
-    outline: none;
-  }
-
   form {
     max-width: 450px;
-    margin: 0 auto;
+    margin: auto;
     text-align: center;
+    vertical-align: middle;
+
+    > a {
+      background-color: transparent;
+      color: colors.$title;
+      font-size: 1rem;
+      float: right;
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+    }
+
+    > a:hover {
+      color: colors.$title-button-hover;
+    }
+
+    > a:active {
+      color: colors.$title-button-active
+    }
 
     // positioning context
     > div {

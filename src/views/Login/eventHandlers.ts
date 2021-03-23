@@ -12,8 +12,11 @@ ipcMain.on("authenticate", (event, username: string, password: string, rememberM
             if(key.toLocaleString() === user.password.toLocaleString()) {
                 if(user.rememberMe !== rememberMe) {
                     user.rememberMe = rememberMe;
-                    const stmt = database.prepare("UPDATE users SET rememberMe = ?, updatedAt = ? WHERE id = ?");
-                    stmt.run(rememberMe ? 1 : 0, formatDate(), user.id);
+                    User.update({
+                        id: user.id,
+                        updatedAt: formatDate(),
+                        rememberMe: rememberMe ? 1 : 0
+                    });
                 }
                 
                 ipcMain.emit("setActiveUser", user.id);

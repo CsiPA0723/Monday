@@ -17,22 +17,6 @@ if (require("electron-squirrel-startup")) {
     app.quit();
 }
 
-let activeUserUUID: string;
-
-ipcMain.on("getActiveUser", async (event) => {
-    try {
-        const user = User.findByPk(activeUserUUID);
-        if(!user) throw new Error("Active user cannot be found inside database");
-        event.reply("getActiveUser", user);
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-ipcMain.on("setActiveUser", async (_, userUUID: string) => {
-    activeUserUUID = userUUID;
-});
-
 const createWindow = (): void => {
     // Create the browser window.
     mainWindow = new BrowserWindow({

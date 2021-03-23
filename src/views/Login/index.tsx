@@ -16,26 +16,21 @@ function Login() {
     }
 
     window.login.on("registerUser", initLogin);
-    
+
     return () => {
       window.login.off("registerUser", initLogin);
-    }
+    };
   }, []);
 
   if (loginOrRegist === "login") {
     return (
       <div className="login">
-        <button onClick={() => {
-          setLoginOrRegist("regist");
-        }}>
-          To Register
-        </button>
-        <h1>Login</h1>
         <form onSubmit={(e) => {
-            e.preventDefault();
-            const { username, password, rememberMe } = details;
-            window.login.send("authenticate", username, password, rememberMe ? 1 : 0);
+          e.preventDefault();
+          const { username, password, rememberMe } = details;
+          window.login.send("authenticate", username, password, rememberMe ? 1 : 0);
         }}>
+          <h1>Login</h1>
           <div>
             <input
               type="text"
@@ -70,23 +65,23 @@ function Login() {
           </div>
 
           <input type="submit" value="Login" />
+          <a onClick={() => {
+            setLoginOrRegist("regist");
+          }}>
+            To Register {">"}
+          </a>
         </form>
       </div>
     );
   } else if (loginOrRegist === "regist") {
     return (
       <div className="login">
-        <button onClick={() => {
-          setLoginOrRegist("login");
-        }}>
-          To Login
-        </button>
-        <h1>Register</h1>
         <form onSubmit={(e) => {
-            e.preventDefault();
-            const { username, password } = details;
-            window.login.send("registerUser", username, password);
+          e.preventDefault();
+          const { username, password } = details;
+          window.login.send("registerUser", username, password);
         }}>
+          <h1>Register</h1>
           <div>
             <input
               type="text"
@@ -115,6 +110,11 @@ function Login() {
             </div>
           </div>
           <input type="submit" value="Register" />
+          <a onClick={() => {
+            setLoginOrRegist("login");
+          }}>
+            {"<"} Back to Login
+          </a>
         </form>
       </div>
     );
