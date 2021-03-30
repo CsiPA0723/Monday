@@ -1,0 +1,66 @@
+@use "colors";
+
+#notepad {
+  padding: 4px;
+
+  .note {
+    word-break: break-all;
+
+    .dragHandle {
+      width: 12px;
+      height: 30px;
+
+      svg {
+        overflow: hidden;
+        opacity: 0;
+        vertical-align: middle;
+      }
+    }
+    &:hover .dragHandle svg,
+    &:active .dragHandle svg {
+      opacity: 1;
+    }
+
+    .editable {
+      color: inherit;
+      text-align: inherit;
+      background: inherit;
+      background-color: inherit;
+      border: none;
+      outline: none;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    .inputIsActive {
+      background-color: #61daff18;
+      border-radius: 4px;
+    }
+  }
+
+  .add-note-button {
+    margin-left: 10px;
+    display: block;
+    color: colors.$title-button;
+    background-color: colors.$background;
+    border: 0;
+    border-radius: 1rem;
+    outline: none;
+    font-size: 1.2rem;
+  }
+  .add-note-button::before {
+    content: "+";
+    margin-right: 10px;
+    font-size: small;
+  }
+  .add-note-button::after {
+    content: "Add Note";
+    font-size: small;
+  }
+  .add-note-button:hover {
+    color: colors.$title-button-hover;
+  }
+  .add-note-button:active {
+    color: colors.$title-button-active;
+  }
+}

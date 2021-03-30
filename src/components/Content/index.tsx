@@ -1,15 +1,23 @@
 import React, { lazy, useEffect, useState } from 'react';
+import { UserSettingsStatic } from "../../systems/database/models/user_settings";
 
 const importView = (viewName: string) => lazy(() => import(`../../views/${viewName}`).catch(console.error));
 
+export type BasicViewProps = {
+  userSettings: UserSettingsStatic
+}
 
-function Content({ view }: { view: string }) {
+type ContentProps = {
+  view: string
+} & BasicViewProps;
+
+function Content({ view, userSettings }: ContentProps) {
   const [page, setPage] = useState(null);
   
   useEffect(() => {
     async function loadView() {
       const View = await importView(view);
-      setPage(<View />);
+      setPage(<View usesSettings={userSettings} />);
     }
     loadView();
   }, [view]);

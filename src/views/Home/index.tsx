@@ -1,23 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { BasicViewProps } from "../../components/Content";
 
-
-function Home() {
-  const [ username, setUsername ] = useState<string>(null);
-
-  useEffect(() => {
-    function setName(_, user) {
-      setUsername(user)
-    }
-
-
-    return () => {
-      
-    }
-  });
-
+function Home({userSettings}: BasicViewProps) {
   return (
     <>
-      <h1>Hello {}</h1>
+      <h1>Hi {userSettings?.name ? userSettings?.name : "User"}</h1>
     </>
   );
 }

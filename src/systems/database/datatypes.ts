@@ -59,18 +59,18 @@ export abstract class Model<T> {
 
     public findByPk(primaryKey: string | number): BuildStatic<T> {
         if(this.isNotDefined) throw new Error("Model is not defined!");
-        return this.database.prepare("SELECT * FROM ? WHERE id = ?;").get(this.tableName, primaryKey);
+        return this.database.prepare(`SELECT * FROM ${this.tableName} WHERE id = ?;`).get(primaryKey);
     }
 
     public deleteByPk(primaryKey: string): any {
         if(this.isNotDefined) throw new Error("Model is not defined!");
-        return this.database.prepare("DELETE FROM ? WHERE id = ?;").run(this.tableName, primaryKey);
+        return this.database.prepare(`DELETE FROM ${this.tableName} WHERE id = ?;`).run(primaryKey);
     }
 
     public update(data: MakeSomePartials<T>|MustAtUpdate): any {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const { id, ...restData } = (data as MustAtUpdate);
-        const stmt = this.database.prepare(`UPDATE ${this.tableName} SET ${buildUpdateSetsFrom(restData)} WHERE id = ?`);
+        const stmt = this.database.prepare(`UPDATE ${this.tableName} SET ${buildUpdateSetsFrom(restData)} WHERE id = ?;`);
         return stmt.run(restData, id);
     }
 

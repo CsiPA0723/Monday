@@ -2,9 +2,15 @@
 
 .headbar {
   display: block;
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  height: 24px;
   width: 100%;
-  background-color: colors.$headbar-bg;
+  left: 0;
+  top: 0;
   overflow: auto;
+  background-color: colors.$headbar-bg;
   -webkit-user-select: none;
   user-select: none;
   -webkit-app-region: drag;
