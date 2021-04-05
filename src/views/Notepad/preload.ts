@@ -1,17 +1,13 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-import "./components/Headbar/preload";
-import "./views/Login/preload";
-import "./views/Notepad/preload";
 declare global {
-    interface Window { api: typeof api }
+    interface Window { notepad: typeof notepad }
 }
 
-const validSendChannels = ["getUserSettings", "setUserSettings", "setActiveUser"] as const;
-const validOnChannels = ["getUserSettings", "setActiveUser"] as const;
+const validSendChannels = ["setNotes", "getNotes"] as const;
+const validOnChannels = ["getNotes"] as const;
 
-
-const api = {
+const notepad = {
     send(channel: typeof validSendChannels[number], ...args: any[]) {
         if(!validSendChannels.includes(channel)) return;
         ipcRenderer.send(channel, ...args);
@@ -26,4 +22,4 @@ const api = {
     }
 };
 
-contextBridge.exposeInMainWorld("api", api);
+contextBridge.exposeInMainWorld("notepad", notepad);

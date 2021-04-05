@@ -52,7 +52,7 @@ class UserModel extends Model<UserAttributes> {
             createdAt: formatDate(),
             updatedAt: formatDate()
         };
-        const stmt = this.database.prepare(`INSERT INTO users VALUES (@${Object.getOwnPropertyNames(user).join(", @")});`);
+        const stmt = this.database.prepare(`INSERT INTO ${this.tableName} VALUES (@${Object.getOwnPropertyNames(user).join(", @")});`);
         stmt.run(user);
         return user;
     }

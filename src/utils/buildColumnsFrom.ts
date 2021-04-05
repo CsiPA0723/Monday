@@ -9,7 +9,7 @@ export default function buildColumnsFrom(modelAttributes: ModelAttributes<any>) 
             let string = `${key} ${type}`;
             if(primaryKey) string += " PRIMARY KEY";
             if((autoIncrement || primaryKey) && type === DataTypes.INTEGER) string += " AUTOINCREMENT";
-            if(unique) string += "UNIQUE";
+            if(unique) string += " UNIQUE";
             if(!allowNull) string += " NOT NULL";
             if(defaultValue !== undefined && defaultValue !== null) string += ` DEFAULT(${defaultValue})`;
             if(references) {

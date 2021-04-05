@@ -2,7 +2,7 @@ import React from 'react';
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 
-import Note, { NoteProps } from "../Note";
+import Note, { NoteProps, noteTypesEnum } from "../Note";
 
 export type noteData = { id: string, type: NoteProps["noteType"], text: string; };
 
@@ -51,12 +51,14 @@ function Notes(props: NotesProps) {
         onClick={() => {
           const newNotes = Array.from(props.notes);
           const sortedNotes = props.notes.sort((a, b) => parseInt(a.id.split("-")[1]) - parseInt(b.id.split("-")[1]));
-          const splittedLastNoteId = sortedNotes[props.notes.length - 1].id.split("-");
-          const newNoteId = `${splittedLastNoteId[0]}-${parseInt(splittedLastNoteId[1]) + 1}`;
+          const splittedLastNoteId = sortedNotes[props.notes.length - 1]?.id.split("-");
+          const noteName = splittedLastNoteId && splittedLastNoteId[0] || "note";
+          const noteNumber = splittedLastNoteId && splittedLastNoteId[1] || "-1";
+          const newNoteId = `${noteName}-${parseInt(noteNumber) + 1}`;
           newNotes.push({
             id: newNoteId,
             text: "Edit me!",
-            type: "note"
+            type: noteTypesEnum.NOTE
           });
           props.setNotes([...newNotes]);
         }}

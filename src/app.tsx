@@ -10,7 +10,7 @@ type Views = "Calendar"|"Home"|"Notepad"|"User";
 
 function App() {
   const [view, setView] = useState<Views>("Home");
-  const [authenticated, setAuthenticated] = useState(false);
+  const [userId, setUserId] = useState<string>();
   const [userSettings, setUserSettings] = useState<UserSettingsStatic>(null);
 
   useEffect(() => {
@@ -23,11 +23,11 @@ function App() {
     return () => {
       window.api.off("getUserSettings", updateUserSettings);
     }
-  }, [authenticated]);
+  }, [userId]);
 
   useEffect(() => {
     function setTrueAuthenticated(_, userUUID: string) {
-      setAuthenticated(true);
+      setUserId(userUUID);
       window.api.send("setActiveUser", userUUID);
     }
 
@@ -39,11 +39,11 @@ function App() {
   }, []);
   
 
-  if(authenticated) {
+  if(userId) {
     return (
       <div className="app-container">
         <SideBar view={view} setView={(viewName: Views) => setView(viewName)} />
-        <Content view={view} userSettings={userSettings}/>
+        <Content view={view} userId={userId} userSettings={userSettings}/>
       </div>
     );
   } else return <><Login /></>;

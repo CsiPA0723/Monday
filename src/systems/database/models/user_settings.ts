@@ -20,6 +20,10 @@ class UserSettingsModel extends Model<UserSettingsAttributes> {
         },
         name: { type: DataTypes.STRING }
     };
+
+    public create() {
+        throw new Error("Method not implemented.");
+    }
 }
 
 export const UserSettingsFactory = new UserSettingsModel();

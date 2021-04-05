@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow } from "electron";
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
@@ -6,8 +6,9 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 const debug = /--debug/.test(process.argv[2]); // npm run debug
 const dev = /--dev/.test(process.argv[3]); // npm run debug:dev
 
-import Database, { User } from "./systems/database";
+import Database, { Column, Note, User } from "./systems/database";
 import "./eventHandlers";
+import formatDate from "./utils/formatDate";
 
 let mainWindow: BrowserWindow;
 
@@ -47,7 +48,19 @@ const createWindow = (): void => {
 app.on("ready", () => {
     Database.testConnection();
 
-    if(debug) User.create("Test", "asd", false);
+    if(debug) {
+        const user = User.create("Test", "asd", false);
+        const column = Column.create(user.id, "notes");
+        Note.create({ userId: user.id, columnId: `notes-${formatDate()}`, noteId: "note-0", text: "Test1", type: "head" });
+        Note.create({ userId: user.id, columnId: `notes-${formatDate()}`, noteId: "note-1", text: "Testing", type: "note" });
+        Note.create({ userId: user.id, columnId: `notes-${formatDate()}`, noteId: "note-2", text: "Testing", type: "note" });
+        Note.create({ userId: user.id, columnId: `notes-${formatDate()}`, noteId: "note-3", text: "Testing", type: "note" });
+        Column.update({
+            id: column.id,
+            idOrder: ["note-0", "note-1", "note-2", "note-3"].join(","),
+            updatedAt: formatDate()
+        });
+    }
     
     createWindow();
 

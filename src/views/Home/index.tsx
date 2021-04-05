@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicViewProps } from "../../components/Content";
+import BasicViewProps from "../BasicViewProps";
 
 function Home({userSettings}: BasicViewProps) {
   return (

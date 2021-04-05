@@ -3,9 +3,29 @@
 #notepad {
   padding: 4px;
 
-  .note {
-    word-break: break-all;
+  .date-container {
+    width: fit-content;
+    margin: 0px auto;
 
+    * { margin: 0px 10px; }
+    span { padding: 4px; }
+
+    #date-picker {
+      background-color: colors.$background;
+      color: colors.$text;
+      outline: none;
+      border: 1px solid colors.$title;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      background-color: colors.$text;
+    }
+  }
+
+  .note {
     .dragHandle {
       width: 12px;
       height: 30px;
@@ -33,7 +53,7 @@
     }
 
     .inputIsActive {
-      background-color: #61daff18;
+      background-color: colors.$activeInput;
       border-radius: 4px;
     }
   }

@@ -7,7 +7,7 @@ import useOnClickOutside from "../../hooks/useOnClickOutside";
 export type NoteProps = {
   noteId: string;
   index: number;
-  noteType: keyof typeof noteTypes;
+  noteType: noteTypesEnum
   text: string;
   onSetText: (inputValue: string) => void;
 };
@@ -21,6 +21,14 @@ const Container = styled.div<{ isDragging: boolean; noteType: keyof typeof noteT
   transition: outline 0.5s ease;
   ${props => (props.noteType === "head" ? (`border-bottom: 1px solid #72767d; margin-bottom: 10px;`) : "")}
 `;
+
+export enum noteTypesEnum {
+  NOTE = "note",
+  HEAD = "head",
+  FOOD = "food",
+  SPORT = "sport",
+  TASK = "task"
+}
 
 const noteTypes = {
   "note": styled.div`
@@ -49,6 +57,18 @@ function Note(props: NoteProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
+  function updateStyle() {
+    const textStyle = getComputedStyle(textRef.current);
+    inputRef.current.style.font = textStyle.font;
+    inputRef.current.style.margin = textStyle.margin;
+    inputRef.current.style.padding = textStyle.padding;
+  }
+
+  useEffect(() => {
+    updateStyle();
+    setInputValue(props.text);
+  }, [props.text]);
+
   useOnClickOutside(wrapperRef, () => {
     if (isInputActive) {
       props.onSetText(inputValue);
@@ -57,12 +77,7 @@ function Note(props: NoteProps) {
     }
   });
 
-  useEffect(() => {
-    const textStyle = getComputedStyle(textRef.current);
-    inputRef.current.style.font = textStyle.font;
-    inputRef.current.style.margin = textStyle.margin;
-    inputRef.current.style.padding = textStyle.padding;
-  }, [textRef, inputRef]);
+  useEffect(updateStyle, [textRef, inputRef]);
 
   useEffect(() => {
     if (isInputActive) {
@@ -105,7 +120,7 @@ function Note(props: NoteProps) {
                 ref: textRef,
                 className: "editable",
                 hidden: isInputActive ? true : false
-              }, props.text
+              }, inputValue
             )}
             <input
               ref={inputRef}

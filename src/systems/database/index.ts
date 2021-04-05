@@ -4,6 +4,7 @@ import { UserFactory } from "./models/user";
 import { UserSettingsFactory } from "./models/user_settings";
 import { NoteFactory } from "./models/note";
 import { FoodFactory } from "./models/food";
+import { ColumnFactory } from "./models/column";
 
 export const database = new Sqlite(path.join(__dirname, "database.sqlite"), { verbose: console.log });
 database.pragma("synchronous = 1");
@@ -24,4 +25,5 @@ export default {
 export const User = UserFactory.define(database);
 export const UserSettings = UserSettingsFactory.define(database);
 export const Note = NoteFactory.define(database);
+export const Column = ColumnFactory.define(database);
 export const Food = FoodFactory.define(database);

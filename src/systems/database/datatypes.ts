@@ -67,6 +67,11 @@ export abstract class Model<T> {
         return this.database.prepare(`DELETE FROM ${this.tableName} WHERE id = ?;`).run(primaryKey);
     }
 
+    public find(whereCause: Array<any>) {
+        if(this.isNotDefined) throw new Error("Model is not defined!");
+
+    }
+
     public update(data: MakeSomePartials<T>|MustAtUpdate): any {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const { id, ...restData } = (data as MustAtUpdate);
@@ -85,4 +90,6 @@ export abstract class Model<T> {
         this.isNotDefined = false;
         return this;
     }
+
+    public abstract create(...args: any[]): any;
 }

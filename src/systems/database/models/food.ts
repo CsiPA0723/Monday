@@ -47,7 +47,7 @@ class FoodModel extends Model<FoodAttributes> {
     };
     
     public create() {
-       throw new Error("Not implemented yet!");
+        throw new Error("Method not implemented.");
     }
 }
 
