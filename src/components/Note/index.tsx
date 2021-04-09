@@ -3,13 +3,14 @@ import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import useKeyPress from "../../hooks/useKeyPress";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
+import InlineEdit from "../InlineEdit";
 
 export type NoteProps = {
   noteId: string;
   index: number;
   noteType: noteTypesEnum
   text: string;
-  onSetNote: ({ text: string, type: noteTypesEnum }) => void;
+  onSetNote: ({ text, type }: {text: string, type: noteTypesEnum}) => void;
 };
 
 const Container = styled.div<{ isDragging: boolean; noteType: keyof typeof noteTypes; }>`
@@ -24,8 +25,8 @@ export enum noteTypesEnum {
   NOTE = "note",
   HEAD = "head",
   FOOD = "food",
-  SPORT = "sport",
-  TASK = "task"
+  // SPORT = "sport",
+  // TASK = "task"
 }
 
 export const noteTypes = {
@@ -39,8 +40,8 @@ export const noteTypes = {
     border-bottom: 1px solid #72767d; margin-bottom: 10px;
   `,
   "food": styled.div``,
-  "sport": styled.div``,
-  "task": styled.div``
+  // "sport": styled.div``,
+  // "task": styled.div``
 } as const;
 
 function createNoteTypeOptions() {
@@ -61,23 +62,7 @@ function Note(props: NoteProps) {
 
   const enter = useKeyPress("Enter");
   const esc = useKeyPress("Escape");
-  const textRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-
-  function updateStyle() {
-    const textStyle = getComputedStyle(textRef.current);
-    inputRef.current.style.font = textStyle.font;
-    inputRef.current.style.margin = textStyle.margin;
-    inputRef.current.style.padding = textStyle.padding;
-  }
-  
-  useEffect(updateStyle, [textRef, inputRef, note]);
-  
-  useEffect(() => {
-    updateStyle();
-    setNote({ text: props.text, type: props.noteType });
-  }, [props.text]);
 
   useOnClickOutside(wrapperRef, () => {
     if (isInputActive) {
@@ -135,22 +120,15 @@ function Note(props: NoteProps) {
                 <path fillRule="evenodd" clipRule="evenodd" d="M0 1.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 8a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM1.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM4 1.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 8a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM5.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" fill="#72767d"></path>
               </svg>
             </div>
-            {React.createElement(
-              noteTypes[note.type],
-              {
-                ref: textRef,
-                className: "editable",
-                hidden: isInputActive
-              }, note.text
-            )}
-            <input
-              ref={inputRef}
-              value={note.text}
-              onClick={() => setIsFocused(true)}
-              onChange={e => setNote({...note, text: e.target.value})}
-              hidden={!isInputActive}
-              className={`editable ${isInputActive ? "inputIsActive" : ""}`}
-            />
+            {note.type !== noteTypesEnum.FOOD ? (
+              <InlineEdit
+                component={noteTypes[note.type]}
+                note={note}
+                isInputActive={isInputActive}
+                onSetNote={(note) => setNote(note)}
+                onSetIsFocused={(v) => setIsFocused(v)}
+              />) : null
+            }
             <button
               type="button"
               className="delete-note"
