@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import "../../assets/scss/sidebar.scss";
+import "../assets/scss/sidebar.scss";
 
 type SideBarProps = {
   view: string,
