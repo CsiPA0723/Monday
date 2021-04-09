@@ -30,12 +30,11 @@ function Notepad({ userId }: BasicViewProps) {
     window.notepad.send("getNotes", date, userId);
 
     function handleGetNotes(_, stringData: string) {
-      console.log(stringData);
       const gotData = JSON.parse(stringData);
-      console.log(gotData);
-      if(gotData.columnOrder.length === 0) {
-        gotData.columns[`notes-${formatDate()}`] = {
-          id: `notes-${formatDate()}`,
+      const columnId = `notes-${formatDate(date)}_${userId}`;
+      if (gotData.columnOrder.length === 0) {
+        gotData.columns[columnId] = {
+          id: columnId,
           idOrder: ["note-0"],
           rows: {
             "note-0": {
@@ -46,10 +45,10 @@ function Notepad({ userId }: BasicViewProps) {
           },
           title: "Notes"
         };
-        gotData.columnOrder = [`notes-${formatDate()}`];
+        gotData.columnOrder = [columnId];
         setData(gotData);
       }
-      setData({...data, ...gotData});
+      setData({ ...data, ...gotData });
     }
 
     window.notepad.on("getNotes", handleGetNotes);
@@ -85,12 +84,25 @@ function Notepad({ userId }: BasicViewProps) {
       }
     };
     setData(newState);
+    window.notepad.send("setNotes", newState, userId);
   };
 
   return (
     <div id="notepad">
       <div className="date-container">
-        <span>{"<"}</span>
+        <div
+          className="date-left"
+          onClick={() => {
+            const dDate = new Date(date);
+            dDate.setDate(dDate.getDate() - 1);
+            setDate(formatDate(dDate));
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 0 24 24" width="48px" fill="currentcolor">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+          </svg>
+        </div>
         <input
           type="date"
           name="date-picker"
@@ -99,11 +111,21 @@ function Notepad({ userId }: BasicViewProps) {
           onChange={e => setDate(e.target.value)}
           min={"1970-01-01"}
         />
-        <span>{">"}</span>
+        <div
+          className="date-right"
+          onClick={() => {
+            const dDate = new Date(date);
+            dDate.setDate(dDate.getDate() + 1);
+            setDate(formatDate(dDate));
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 0 24 24" width="48px" fill="currentcolor">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+          </svg>
+        </div>
       </div>
-      <DragDropContext
-        onDragEnd={handleDragEnd}
-      >
+      <DragDropContext onDragEnd={handleDragEnd}>
         {data.columnOrder.map(columnId => {
           const column = data.columns[columnId];
           const notes = column.idOrder.map(id => column.rows[id]);
@@ -132,6 +154,7 @@ function Notepad({ userId }: BasicViewProps) {
                   },
                 };
                 setData(newState);
+                window.notepad.send("setNotes", newState, userId);
               }}
             />
           );

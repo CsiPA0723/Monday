@@ -1,8 +1,4 @@
 import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
-import { v4 as uuidv4 } from "uuid";
-import crypto from "crypto";
-import formatDate from "../../../utils/formatDate";
-import randomBackupCode from "../../../utils/randomBackupCode";
 
 type UserAttributes = {
     id: string;
@@ -40,22 +36,6 @@ class UserModel extends Model<UserAttributes> {
             allowNull: false,
         }
     };
-    
-    public create(username: string, password: string, rememberMe?: boolean) {
-        const id = uuidv4();
-        const user: UserStatic = {
-            id: id,
-            username: username,
-            password: crypto.pbkdf2Sync(password, id, 1000, 512, "sha512"),
-            rememberMe: rememberMe ? 1 : 0,
-            backupCode: randomBackupCode(),
-            createdAt: formatDate(),
-            updatedAt: formatDate()
-        };
-        const stmt = this.database.prepare(`INSERT INTO ${this.tableName} VALUES (@${Object.getOwnPropertyNames(user).join(", @")});`);
-        stmt.run(user);
-        return user;
-    }
 }
 
 export const UserFactory = new UserModel();

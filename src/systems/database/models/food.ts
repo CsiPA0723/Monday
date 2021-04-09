@@ -45,10 +45,6 @@ class FoodModel extends Model<FoodAttributes> {
             allowNull: false
         }
     };
-    
-    public create() {
-        throw new Error("Method not implemented.");
-    }
 }
 
 export const FoodFactory = new FoodModel();

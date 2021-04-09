@@ -1,4 +1,3 @@
-import formatDate from "../../../utils/formatDate";
 import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
 
 type NoteAttributes = {
@@ -49,41 +48,6 @@ class NoteModel extends Model<NoteAttributes> {
             allowNull: false
         }
     };
-
-    public create({
-        userId,
-        columnId,
-        noteId,
-        type,
-        text,
-    }: {
-        userId: string;
-        columnId: string;
-        noteId: string;
-        type: string;
-        text: string;
-    }) {
-        const note: Partial<NoteStatic> = {
-            userId: userId,
-            columnId: columnId,
-            noteId: noteId,
-            type: type,
-            text: text,
-            createdAt: formatDate(),
-            updatedAt: formatDate()
-        };
-        const propNames = Object.getOwnPropertyNames(note);
-        const string = `INSERT INTO ${this.tableName} (${propNames.join(", ")}) VALUES (@${propNames.join(", @")});`;
-        const stmt = this.database.prepare(string);
-        stmt.run(note);
-        return note;
-    }
-    /** 
-     * @param columnName - `${name}-${date}` like `notes-2021-04-03`
-     */
-    public getAllFrom(columnName: string): NoteStatic[] {
-        return this.database.prepare("SELECT notes.* FROM columns, notes WHERE columns.id = ?;").all(columnName);
-    }
 }
 
 export const NoteFactory = new NoteModel();

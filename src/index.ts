@@ -3,12 +3,11 @@ import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-insta
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 
-const debug = /--debug/.test(process.argv[2]); // npm run debug
-const dev = /--dev/.test(process.argv[3]); // npm run debug:dev
+const debug = process.argv.some(v => /--debug/.test(v)); // npm run debug
+const dev = process.argv.some(v => /--dev/.test(v)); // npm run debug:dev
 
-import Database, { Column, Note, User } from "./systems/database";
+import Database from "./systems/database";
 import "./eventHandlers";
-import formatDate from "./utils/formatDate";
 
 let mainWindow: BrowserWindow;
 
@@ -23,8 +22,8 @@ const createWindow = (): void => {
     mainWindow = new BrowserWindow({
         height: 600,
         width: 800,
-        minWidth: 400,
-        minHeight: 300,
+        minHeight: 320,
+        minWidth: 480,
         frame: debug ? true : false,
         webPreferences: {
             nodeIntegration: false,
@@ -47,20 +46,8 @@ const createWindow = (): void => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
     Database.testConnection();
-
-    if(debug) {
-        const user = User.create("Test", "asd", false);
-        const column = Column.create(user.id, "notes");
-        Note.create({ userId: user.id, columnId: `notes-${formatDate()}`, noteId: "note-0", text: "Test1", type: "head" });
-        Note.create({ userId: user.id, columnId: `notes-${formatDate()}`, noteId: "note-1", text: "Testing", type: "note" });
-        Note.create({ userId: user.id, columnId: `notes-${formatDate()}`, noteId: "note-2", text: "Testing", type: "note" });
-        Note.create({ userId: user.id, columnId: `notes-${formatDate()}`, noteId: "note-3", text: "Testing", type: "note" });
-        Column.update({
-            id: column.id,
-            idOrder: ["note-0", "note-1", "note-2", "note-3"].join(","),
-            updatedAt: formatDate()
-        });
-    }
+    
+    if(debug) Database.debug()
     
     createWindow();
 

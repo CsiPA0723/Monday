@@ -2,7 +2,8 @@ import { DataTypes, ModelAttributes } from "../systems/database/datatypes";
 
 export default function buildColumnsFrom(modelAttributes: ModelAttributes<any>) {
     let tableArrString: string[] = [];
-    let foreignString: string = null;
+    let foreignKeys: string[] = [];
+    let foreignReferences: string[] = [];
     for (const key in modelAttributes) {
         if (Object.prototype.hasOwnProperty.call(modelAttributes, key)) {
             const { type, allowNull, defaultValue, primaryKey, autoIncrement, unique, references } = modelAttributes[key];
@@ -14,11 +15,17 @@ export default function buildColumnsFrom(modelAttributes: ModelAttributes<any>) 
             if(defaultValue !== undefined && defaultValue !== null) string += ` DEFAULT(${defaultValue})`;
             if(references) {
                 const { foreignKey, table } = references;
-                foreignString = ` FOREIGN KEY (${key}) REFERENCES ${table} (${foreignKey})`;
+                foreignKeys.push(key);
+                foreignReferences.push(`${table} (${foreignKey})`);
+                //foreignString = ` FOREIGN KEY (${key}) REFERENCES ${table} (${foreignKey})`;
             }
             tableArrString.push(string);
         }
     }
-    if(foreignString !== null) tableArrString.push(foreignString);
+    if(foreignKeys.length > 0) {
+        for (let i = 0; i < foreignKeys.length; i++) {
+            tableArrString.push(`FOREIGN KEY (${foreignKeys[i]}) REFERENCES ${foreignReferences[i]}`);
+        }
+    }
     return tableArrString;
 }

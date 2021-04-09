@@ -1,10 +1,9 @@
 import React from 'react';
 import { Droppable } from "react-beautiful-dnd";
-import styled from "styled-components";
 
-import Note, { NoteProps, noteTypesEnum } from "../Note";
+import Note, { noteTypesEnum } from "../Note";
 
-export type noteData = { id: string, type: NoteProps["noteType"], text: string; };
+export type noteData = { id: string, type: noteTypesEnum, text: string; };
 
 type NotesProps = {
   notesId: string;
@@ -12,14 +11,12 @@ type NotesProps = {
   setNotes: (notes: noteData[]) => void;
 };
 
-const Container = styled.div``;
-
 function Notes(props: NotesProps) {
   return (
     <>
       <Droppable droppableId={props.notesId}>
         {provided => (
-          <Container
+          <div
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
@@ -30,7 +27,7 @@ function Notes(props: NotesProps) {
                 noteId={note.id}
                 noteType={note.type}
                 text={note.text}
-                onSetText={text => {
+                onSetNote={({ text, type }: {text: string, type: noteTypesEnum}) => {
                   const index = props.notes.findIndex(n => n.id === note.id);
                   if (text.length === 0) {
                     const newNotes = Array.from(props.notes);
@@ -38,12 +35,13 @@ function Notes(props: NotesProps) {
                     return props.setNotes([...newNotes]);
                   }
                   props.notes[index].text = text;
+                  props.notes[index].type = type;
                   props.setNotes([...props.notes]);
                 }}
               />
             ))}
             {provided.placeholder}
-          </Container>
+          </div>
         )}
       </Droppable>
       <button

@@ -1,6 +1,8 @@
 import Sqlite from "better-sqlite3";
 import buildColumnsFrom from "../../utils/buildColumnsFrom";
 import buildUpdateSetsFrom from "../../utils/buildUpdateSetsFrom";
+import buildUpsertSetsFrom from "../../utils/buildUpsertSetsFrom";
+import buildWhereClauseFrom from "../../utils/buildWhereClauseFrom";
 
 export enum DataTypes {
     BOOLEAN = "INTEGER",
@@ -47,36 +49,84 @@ const BasicModel: ModelAttributes<BasicAttributes> = {
 }
 
 type MustAtUpdate = { id:string|number, updatedAt: string };
-type MakeSomePartials<T> = Omit<BuildStatic<T>, keyof Omit<BuildStatic<T>, keyof MustAtUpdate>> & Partial<Omit<BuildStatic<T>, keyof MustAtUpdate>>;
+type MakeSomePartial<T> = Omit<BuildStatic<T>, keyof Omit<BuildStatic<T>, keyof MustAtUpdate>> & Partial<Omit<BuildStatic<T>, keyof MustAtUpdate>>;
 
-export abstract class Model<T> {
+export abstract class Model<Attributes> {
     public abstract tableName: string;
-    public abstract model: ModelAttributes<T>;
+    public abstract model: ModelAttributes<Attributes>;
 
     public database: Sqlite.Database;
 
     private isNotDefined = true;
 
-    public findByPk(primaryKey: string | number): BuildStatic<T> {
+    public findByPk(primaryKey: string | number): BuildStatic<Attributes> {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         return this.database.prepare(`SELECT * FROM ${this.tableName} WHERE id = ?;`).get(primaryKey);
     }
 
-    public deleteByPk(primaryKey: string): any {
+    public deleteByPk(primaryKey: string|number): any {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         return this.database.prepare(`DELETE FROM ${this.tableName} WHERE id = ?;`).run(primaryKey);
     }
 
-    public find(whereCause: Array<any>) {
+    /** @param whereClause - `[{foo: foo}, "AND", {bar: bar}, "OR", {fooBar: foo.bar}]` */
+    public find(whereClause: Array<Partial<Attributes>|"OR"|"AND"|"NOT">): BuildStatic<Attributes> {
         if(this.isNotDefined) throw new Error("Model is not defined!");
-
+        const { data, whereString } = buildWhereClauseFrom(whereClause);
+        const stmtString = `SELECT * FROM ${this.tableName} WHERE ${whereString};`;
+        const stmt = this.database.prepare(stmtString);
+        return stmt.get(data);
     }
 
-    public update(data: MakeSomePartials<T>|MustAtUpdate): any {
+    /** @param whereClause - `[{foo: foo}, "AND", {bar: bar}, "OR", {fooBar: foo.bar}]` */
+    public findAll(whereClause: Array<Partial<Attributes>|"OR"|"AND"|"NOT">): BuildStatic<Attributes>[] {
+        if(this.isNotDefined) throw new Error("Model is not defined!");
+        const { data, whereString } = buildWhereClauseFrom(whereClause);
+        const stmtString = `SELECT * FROM ${this.tableName} WHERE ${whereString};`;
+        const stmt = this.database.prepare(stmtString);
+        return stmt.all(data);
+    }
+
+    public create(data: BuildStatic<Attributes>) {
+        const propNames = Object.getOwnPropertyNames(data);
+        const stmtString = `INSERT INTO ${this.tableName} (${propNames.join(", ")}) VALUES (@${propNames.join(", @")});`;
+        const stmt = this.database.prepare(stmtString);
+        return { runResult: stmt.run(data), object: data };
+    };
+
+    /**
+     * @param data - Every field must have a value or set to null.
+     * - Like: `{ id: foo.id, bar: null }`
+     * @param excludeData - Set fields to null to exclude them from updating
+     *  - Defaults to `{}`
+     */
+    public upsert(data: BuildStatic<Attributes>, excludeData: Partial<BuildStatic<Attributes>> = {}) {
+        if(this.isNotDefined) throw new Error("Model is not defined!");
+        const propNames = Object.getOwnPropertyNames(data);
+
+        const dataHasUserId = data.hasOwnProperty("userId");
+        const excludeUserIdIfPresent = dataHasUserId ? { userId: null } : {};
+
+        const updateData: MakeSomePartial<Attributes>|MustAtUpdate = {
+            ...data,
+            ...excludeData,
+            ...excludeUserIdIfPresent,
+            createdAt: null
+        };
+        const stmtString = `
+            INSERT INTO ${this.tableName} (${propNames}) VALUES (@${propNames.join(", @")})
+            ON CONFLICT (id) DO UPDATE SET ${buildUpsertSetsFrom(updateData)} ${dataHasUserId ? "WHERE userId = @userId" : ""};
+        `.replace(/\\s{2,}/g, " ").trim();
+        const stmt = this.database.prepare(stmtString);
+        return stmt.run(data);
+    }
+
+    public update(data: MakeSomePartial<Attributes>|MustAtUpdate, userId?: string) {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const { id, ...restData } = (data as MustAtUpdate);
-        const stmt = this.database.prepare(`UPDATE ${this.tableName} SET ${buildUpdateSetsFrom(restData)} WHERE id = ?;`);
-        return stmt.run(restData, id);
+        const userIdCheck = userId ? `AND userId = ?` : "";
+        const stmt = this.database.prepare(`UPDATE ${this.tableName} SET ${buildUpdateSetsFrom(restData)} WHERE id = ? ${userIdCheck};`);
+        return userId ? stmt.run(restData, id, userId) : stmt.run(restData, id);
     }
 
     public define(database: Sqlite.Database) {
@@ -90,6 +140,4 @@ export abstract class Model<T> {
         this.isNotDefined = false;
         return this;
     }
-
-    public abstract create(...args: any[]): any;
 }

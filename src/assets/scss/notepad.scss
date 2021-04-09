@@ -1,4 +1,5 @@
 @use "colors";
+@use "variables";
 
 #notepad {
   padding: 4px;
@@ -6,9 +7,14 @@
   .date-container {
     width: fit-content;
     margin: 0px auto;
+    display: flex;
+    place-items: center;
 
     * { margin: 0px 10px; }
-    span { padding: 4px; }
+    .date-left, .date-right { 
+      color: colors.$text;
+      cursor: pointer;
+    }
 
     #date-picker {
       background-color: colors.$background;
@@ -16,6 +22,7 @@
       outline: none;
       border: 1px solid colors.$title;
       font: inherit;
+      font-size: x-large;
       font-weight: 700;
     }
 
@@ -26,6 +33,12 @@
   }
 
   .note {
+    select, option {
+      background: colors.$background;
+      color: colors.$text;
+      outline: none;
+    }
+
     .dragHandle {
       width: 12px;
       height: 30px;
@@ -41,16 +54,33 @@
       opacity: 1;
     }
 
+    input {
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+
+    .delete-note { 
+      color: colors.$title-button;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+    }
+    .delete-note:hover { color: colors.$title-close-button-hover-bg; }
+    .delete-note:active { color: colors.$title-close-button-active-bg; }
+
     .editable {
+      width: 100%;
       color: inherit;
       text-align: inherit;
       background: inherit;
       background-color: inherit;
-      border: none;
       outline: none;
       overflow-wrap: break-word;
       white-space: pre-wrap;
     }
+
+    input.editable { border: inherit; }
 
     .inputIsActive {
       background-color: colors.$activeInput;
