@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { noteTypesEnum } from "../Note";
+import { noteTypesEnum } from "./Note";
 
 type InlineEditProps = {
   component: any;

@@ -1,5 +1,5 @@
 import React, { lazy, useEffect, useState } from 'react';
-import BasicViewProps from "../../views/BasicViewProps";
+import BasicViewProps from "../views/BasicViewProps";
 
 const importView = (viewName: string) => lazy(() => import(`../../views/${viewName}`).catch(console.error));
 

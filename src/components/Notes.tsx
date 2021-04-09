@@ -1,7 +1,7 @@
 import React from 'react';
 import { Droppable } from "react-beautiful-dnd";
 
-import Note, { noteTypesEnum } from "../Note";
+import Note, { noteTypesEnum } from "./Note";
 
 export type noteData = { id: string, type: noteTypesEnum, text: string; };
 

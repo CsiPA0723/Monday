@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
-import useKeyPress from "../../hooks/useKeyPress";
-import useOnClickOutside from "../../hooks/useOnClickOutside";
-import InlineEdit from "../InlineEdit";
+import useKeyPress from "../hooks/useKeyPress";
+import useOnClickOutside from "../hooks/useOnClickOutside";
+import InlineEdit from "./InlineEdit";
 
 export type NoteProps = {
   noteId: string;
