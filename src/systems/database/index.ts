@@ -11,7 +11,9 @@ import crypto from "crypto";
 import randomBackupCode from "../../utils/randomBackupCode";
 import formatDate from "../../utils/formatDate";
 
-export const database = new Sqlite(path.join(__dirname, "database.sqlite"), { verbose: console.log });
+const isDebug = process.argv.some(v => /--debug/.test(v)); // npm run debug
+
+export const database = new Sqlite(path.join(__dirname, "database.sqlite"), { verbose: isDebug ? console.log : null });
 database.pragma("synchronous = 1");
 database.pragma("journal_mode = wal");
 database.pragma("foreign_keys = 1");
