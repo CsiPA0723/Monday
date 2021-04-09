@@ -4,6 +4,7 @@ import styled from "styled-components";
 import useKeyPress from "../hooks/useKeyPress";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import InlineEdit from "./InlineEdit";
+import Food from "./Food";
 
 export type NoteProps = {
   noteId: string;
@@ -121,13 +122,21 @@ function Note(props: NoteProps) {
               </svg>
             </div>
             {note.type !== noteTypesEnum.FOOD ? (
-              <InlineEdit
-                component={noteTypes[note.type]}
-                note={note}
-                isInputActive={isInputActive}
-                onSetNote={(note) => setNote(note)}
-                onSetIsFocused={(v) => setIsFocused(v)}
-              />) : null
+                <InlineEdit
+                  component={noteTypes[note.type]}
+                  note={note}
+                  isInputActive={isInputActive}
+                  onSetNote={(note) => setNote(note)}
+                  onSetIsFocused={(v) => setIsFocused(v)}
+                />
+              ) : (
+                <Food
+                  note={note}
+                  isInputActive={isInputActive}
+                  onSetNote={(note) => setNote(note)}
+                  onSetIsFocused={(v) => setIsFocused(v)}
+                />
+              )
             }
             <button
               type="button"

@@ -4,6 +4,7 @@ import { UserFactory } from "./models/user";
 import { UserSettingsFactory } from "./models/user_settings";
 import { NoteFactory } from "./models/note";
 import { FoodFactory } from "./models/food";
+import { EatenFactory } from "./models/eaten";
 import { ColumnFactory } from "./models/column";
 
 import { v4 as uuidv4 } from "uuid";
@@ -29,6 +30,7 @@ export const UserSettings = UserSettingsFactory.define(database);
 export const Note = NoteFactory.define(database);
 export const Column = ColumnFactory.define(database);
 export const Food = FoodFactory.define(database);
+export const Eaten = EatenFactory.define(database);
 
 export function debug() {
     const id = uuidv4();

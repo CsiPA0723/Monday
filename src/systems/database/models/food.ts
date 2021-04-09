@@ -22,7 +22,8 @@ class FoodModel extends Model<FoodAttributes> {
         },
         name: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         amount: {
             type: DataTypes.STRING,

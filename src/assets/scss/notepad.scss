@@ -1,5 +1,6 @@
 @use "colors";
 @use "variables";
+@use "food";
 
 #notepad {
   padding: 4px;
@@ -20,7 +21,7 @@
       background-color: colors.$background;
       color: colors.$text;
       outline: none;
-      border: 1px solid colors.$title;
+      border: 1px solid colors.$border;
       font: inherit;
       font-size: x-large;
       font-weight: 700;
@@ -86,6 +87,8 @@
       background-color: colors.$activeInput;
       border-radius: 4px;
     }
+
+    @include food.foodMixin;
   }
 
   .add-note-button {
