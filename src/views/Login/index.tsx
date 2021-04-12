@@ -15,10 +15,10 @@ function Login() {
       setLoginOrRegist("login");
     }
 
-    window.login.on("registerUser", initLogin);
+    window.api.on("registerUser", initLogin);
 
     return () => {
-      window.login.off("registerUser", initLogin);
+      window.api.off("registerUser", initLogin);
     };
   }, []);
 
@@ -28,7 +28,7 @@ function Login() {
         <form onSubmit={(e) => {
           e.preventDefault();
           const { username, password, rememberMe } = details;
-          window.login.send("authenticate", username, password, rememberMe ? 1 : 0);
+          window.api.send("authenticate", username, password, rememberMe ? 1 : 0);
         }}>
           <h1>Login</h1>
           <div>
@@ -79,7 +79,7 @@ function Login() {
         <form onSubmit={(e) => {
           e.preventDefault();
           const { username, password } = details;
-          window.login.send("registerUser", username, password);
+          window.api.send("registerUser", username, password);
         }}>
           <h1>Register</h1>
           <div>

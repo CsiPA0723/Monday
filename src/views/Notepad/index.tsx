@@ -27,7 +27,7 @@ function Notepad({ userId }: BasicViewProps) {
   const [date, setDate] = useState(formatDate());
 
   useEffect(() => {
-    window.notepad.send("getNotes", date, userId);
+    window.api.send("getNotes", date, userId);
 
     function handleGetNotes(_, stringData: string) {
       const gotData = JSON.parse(stringData);
@@ -51,10 +51,10 @@ function Notepad({ userId }: BasicViewProps) {
       setData({ ...data, ...gotData });
     }
 
-    window.notepad.on("getNotes", handleGetNotes);
+    window.api.on("getNotes", handleGetNotes);
 
     return () => {
-      window.notepad.off("getNotes", handleGetNotes);
+      window.api.off("getNotes", handleGetNotes);
     };
   }, [date]);
 
@@ -84,7 +84,7 @@ function Notepad({ userId }: BasicViewProps) {
       }
     };
     setData(newState);
-    window.notepad.send("setNotes", newState, userId);
+    window.api.send("setNotes", newState, userId);
   };
 
   return (
@@ -154,7 +154,7 @@ function Notepad({ userId }: BasicViewProps) {
                   },
                 };
                 setData(newState);
-                window.notepad.send("setNotes", newState, userId);
+                window.api.send("setNotes", newState, userId);
               }}
             />
           );
