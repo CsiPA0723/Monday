@@ -2,9 +2,9 @@ import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
 
 type NoteAttributes = {
     id: number;
-    userId: string;
-    columnId: string;
-    noteId: string;
+    user_id: string;
+    column_id: string;
+    note_id: string;
     type: string;
     text: string;
 };
@@ -19,7 +19,7 @@ class NoteModel extends Model<NoteAttributes> {
             primaryKey: true,
             autoIncrement: true
         },
-        userId: {
+        user_id: {
             type: DataTypes.UUIDV4,
             references: {
                 table: "users",
@@ -27,7 +27,7 @@ class NoteModel extends Model<NoteAttributes> {
             },
             allowNull: false,
         },
-        columnId: {
+        column_id: {
             type: DataTypes.STRING,
             references: {
                 table: "columns",
@@ -35,7 +35,7 @@ class NoteModel extends Model<NoteAttributes> {
             },
             allowNull: false
         },
-        noteId: {
+        note_id: {
             type: DataTypes.STRING,
             allowNull: false
         },

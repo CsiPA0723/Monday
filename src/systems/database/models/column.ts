@@ -2,9 +2,9 @@ import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
 
 type ColumnAttributes = {
     id: string;
-    userId: string;
+    user_id: string;
     title: string;
-    idOrder: string;
+    id_order: string;
 };
 
 export type ColumnStatic = BuildStatic<ColumnAttributes>;
@@ -16,7 +16,7 @@ class ColumnModel extends Model<ColumnAttributes> {
             type: DataTypes.STRING,
             primaryKey: true,
         },
-        userId: {
+        user_id: {
             type: DataTypes.UUIDV4,
             references: {
                 table: "users",
@@ -28,7 +28,7 @@ class ColumnModel extends Model<ColumnAttributes> {
             type: DataTypes.STRING,
             allowNull: false
         },
-        idOrder: {
+        id_order: {
             type: DataTypes.STRING,
             allowNull: false
         }

@@ -38,24 +38,24 @@ export function debug() {
         id: id,
         username: "Test",
         password: crypto.pbkdf2Sync("asd", id, 1000, 512, "sha512"),
-        rememberMe: 0,
+        remember_me: 0,
         backupCode: randomBackupCode(),
         createdAt: formatDate(),
         updatedAt: formatDate()
     }).object;
     const column = Column.create({
         id: `notes-${formatDate()}_${user.id}`,
-        idOrder: "",
+        id_order: "",
         title: "notes",
-        userId: user.id,
+        user_id: user.id,
         updatedAt: formatDate(),
         createdAt: formatDate()
     }).object;
     Note.create({ 
         id: null,
-        userId: user.id,
-        columnId: column.id,
-        noteId: "note-0",
+        user_id: user.id,
+        column_id: column.id,
+        note_id: "note-0",
         text: "Test1",
         type: "head",
         updatedAt: formatDate(),
@@ -64,9 +64,9 @@ export function debug() {
     for (let i = 1; i <= 3; i++) {
         Note.create({
             id: null,
-            userId: user.id,
-            columnId: column.id,
-            noteId: `note-${i}`,
+            user_id: user.id,
+            column_id: column.id,
+            note_id: `note-${i}`,
             text: "Testing",
             type: "note",
             updatedAt: formatDate(),
@@ -76,7 +76,7 @@ export function debug() {
 
     Column.update({
         id: column.id,
-        idOrder: ["note-0", "note-1", "note-2", "note-3"].join(","),
+        id_order: ["note-0", "note-1", "note-2", "note-3"].join(","),
         updatedAt: formatDate()
     });
 
@@ -85,24 +85,24 @@ export function debug() {
         id: id1,
         username: "Test1",
         password: crypto.pbkdf2Sync("asd", id1, 1000, 512, "sha512"),
-        rememberMe: 0,
+        remember_me: 0,
         backupCode: randomBackupCode(),
         createdAt: formatDate(),
         updatedAt: formatDate()
     }).object;
     const column1 = Column.create({
         id: `notes-${formatDate()}_${user1.id}`,
-        idOrder: "",
+        id_order: "",
         title: "notes",
-        userId: user1.id,
+        user_id: user1.id,
         updatedAt: formatDate(),
         createdAt: formatDate()
     }).object;
     Note.create({ 
         id: null,
-        userId: user1.id,
-        columnId: column1.id,
-        noteId: "note-0",
+        user_id: user1.id,
+        column_id: column1.id,
+        note_id: "note-0",
         text: "Test1",
         type: "head",
         updatedAt: formatDate(),
@@ -111,7 +111,7 @@ export function debug() {
 
     Column.update({
         id: column1.id,
-        idOrder: ["note-0"].join(","),
+        id_order: ["note-0"].join(","),
         updatedAt: formatDate()
     });
 }

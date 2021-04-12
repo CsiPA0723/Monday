@@ -4,7 +4,7 @@ type UserAttributes = {
     id: string;
     username: string;
     password: Buffer;
-    rememberMe: number;
+    remember_me: number;
     backupCode: string;
 };
 
@@ -26,7 +26,7 @@ class UserModel extends Model<UserAttributes> {
             type: DataTypes.BUFFER,
             allowNull: false
         },
-        rememberMe: {
+        remember_me: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
