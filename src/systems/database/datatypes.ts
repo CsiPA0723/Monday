@@ -51,6 +51,10 @@ const BasicModel: ModelAttributes<BasicAttributes> = {
 type MustAtUpdate = { id:string|number, updatedAt: string };
 type MakeSomePartial<T> = Omit<BuildStatic<T>, keyof Omit<BuildStatic<T>, keyof MustAtUpdate>> & Partial<Omit<BuildStatic<T>, keyof MustAtUpdate>>;
 
+type MakeThemNull<T> = {
+    [P in keyof T]: null;
+}
+
 export abstract class Model<Attributes> {
     public abstract tableName: string;
     public abstract model: ModelAttributes<Attributes>;
@@ -100,17 +104,18 @@ export abstract class Model<Attributes> {
      * @param excludeData - Set fields to null to exclude them from updating
      *  - Defaults to `{}`
      */
-    public upsert(data: BuildStatic<Attributes>, excludeData: Partial<BuildStatic<Attributes>> = {}) {
+    public upsert(data: BuildStatic<Attributes>, excludeData?: MakeThemNull<Partial<BuildStatic<Attributes>>>) {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const propNames = Object.getOwnPropertyNames(data);
 
         const dataHasUserId = data.hasOwnProperty("userId");
-        const excludeUserIdIfPresent = dataHasUserId ? { userId: null } : {};
 
-        const updateData: MakeSomePartial<Attributes>|MustAtUpdate = {
+        const updateData: MakeThemNull<MakeSomePartial<Attributes>|MustAtUpdate> = {
             ...data,
+            // Exclude fields in the update statement by setting them to null
             ...excludeData,
-            ...excludeUserIdIfPresent,
+            ...dataHasUserId ? { userId: null } : {},
+            id: null,
             createdAt: null
         };
         const stmtString = `
