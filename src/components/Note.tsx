@@ -7,6 +7,7 @@ import InlineEdit from "./InlineEdit";
 import Food from "./Food";
 
 export type NoteProps = {
+  noteDBId: number;
   noteId: string;
   index: number;
   noteType: noteTypesEnum
@@ -131,9 +132,8 @@ function Note(props: NoteProps) {
                 />
               ) : (
                 <Food
-                  note={note}
+                  noteDBId={props.noteDBId}
                   isInputActive={isInputActive}
-                  onSetNote={(note) => setNote(note)}
                   onSetIsFocused={(v) => setIsFocused(v)}
                 />
               )
