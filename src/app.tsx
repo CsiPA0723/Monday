@@ -31,10 +31,10 @@ function App() {
       window.api.send("setActiveUser", userUUID);
     }
 
-    window.login.on("authenticated", setTrueAuthenticated);
-    window.login.send("tryRememberMe");
+    window.api.on("authenticated", setTrueAuthenticated);
+    window.api.send("tryRememberMe");
     return () => {
-      window.login.off("authenticated", setTrueAuthenticated);
+      window.api.off("authenticated", setTrueAuthenticated);
     }
   }, []);
   
