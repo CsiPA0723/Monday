@@ -3,6 +3,7 @@ import "../../assets/scss/notepad.scss";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 
 import Notes, { noteData } from "../../components/Notes";
+import { noteTypesEnum } from "../../components/Note";
 import formatDate from "../../utils/formatDate";
 import BasicViewProps from "../BasicViewProps";
 
@@ -30,7 +31,7 @@ function Notepad({ userId }: BasicViewProps) {
     window.api.send("getNotes", date, userId);
 
     function handleGetNotes(_, stringData: string) {
-      const gotData = JSON.parse(stringData);
+      const gotData = (JSON.parse(stringData) as notesData);
       const columnId = `notes-${formatDate(date)}_${userId}`;
       if (gotData.columnOrder.length === 0) {
         gotData.columns[columnId] = {
@@ -38,9 +39,10 @@ function Notepad({ userId }: BasicViewProps) {
           idOrder: ["note-0"],
           rows: {
             "note-0": {
-              id: "note-0",
+              dbId: null,
+              noteId: "note-0",
               text: "Edit ME or add new note to create notes for this date!",
-              type: "note"
+              type: noteTypesEnum.NOTE
             }
           },
           title: "Notes"
@@ -138,8 +140,8 @@ function Notepad({ userId }: BasicViewProps) {
                 let newNotes: notesData["columns"][string]["rows"] = {};
                 let newNoteIds: notesData["columns"][string]["id"][] = [];
                 for (const note of notes) {
-                  newNotes[note.id] = note;
-                  newNoteIds.push(note.id);
+                  newNotes[note.noteId] = note;
+                  newNoteIds.push(note.noteId);
                 }
                 const newColumn: notesData["columns"][string] = {
                   ...column,
