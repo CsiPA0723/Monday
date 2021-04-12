@@ -11,12 +11,12 @@ ipcMain.on("authenticate", (event, username: string, password: string, rememberM
         if(!user) return dialog.showErrorBox("Login Failed", "Username or Password not matching!");
         const key = crypto.pbkdf2Sync(password, user.id, 1000, 512, "sha512");
         if(key.toLocaleString() === user.password.toLocaleString()) {
-            if(user.rememberMe !== rememberMe) {
-                user.rememberMe = rememberMe;
+            if(user.remember_me !== rememberMe) {
+                user.remember_me = rememberMe;
                 User.update({
                     id: user.id,
                     updatedAt: formatDate(),
-                    rememberMe: rememberMe ? 1 : 0
+                    remember_me: rememberMe ? 1 : 0
                 });
             }
             event.reply("authenticated", user.id);
@@ -28,7 +28,7 @@ ipcMain.on("authenticate", (event, username: string, password: string, rememberM
 
 ipcMain.on("tryRememberMe", (event) => {
     try {
-        const user = User.find([{rememberMe: 1}]);
+        const user = User.find([{remember_me: 1}]);
         if(!user) return;
         event.reply("authenticated", user.id);
     } catch (error) {
@@ -47,7 +47,7 @@ ipcMain.on("registerUser", (event, username: string, password: string) => {
             id: id,
             username: username,
             password: crypto.pbkdf2Sync(password, id, 1000, 512, "sha512"),
-            rememberMe: 0,
+            remember_me: 0,
             backupCode: randomBackupCode(),
             createdAt: formatDate(),
             updatedAt: formatDate()
