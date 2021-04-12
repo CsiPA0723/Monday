@@ -4,6 +4,7 @@ type EatenAttributes = {
     id: number;
     name: string;
     amount: string;
+    columnId: string;
 };
 
 export type EatenStatic = BuildStatic<EatenAttributes>;
@@ -27,6 +28,14 @@ class EatenModel extends Model<EatenAttributes> {
         amount: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        columnId: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            references: {
+                foreignKey: "id",
+                table: "columns"
+            }
         }
     };
 }
