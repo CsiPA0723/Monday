@@ -1,14 +1,36 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 import "./components/Headbar/preload";
-import "./views/Login/preload";
-import "./views/Notepad/preload";
-declare global {
-    interface Window { api: typeof api }
-}
 
-const validSendChannels = ["getUserSettings", "setUserSettings", "setActiveUser"] as const;
-const validOnChannels = ["getUserSettings", "setActiveUser"] as const;
+declare global { interface Window { api: typeof api } };
+
+const validSendChannels = [
+    "authenticate",
+    "registerUser",
+    "tryRememberMe",
+
+    "getUserSettings",
+    "setUserSettings",
+    "setActiveUser",
+
+    "getEaten",
+    "setEaten",
+
+    "setNotes",
+    "getNotes"
+] as const;
+
+const validOnChannels = [
+    "authenticated",
+    "registerUser",
+
+    "getUserSettings",
+    "setActiveUser",
+
+    "getEaten",
+
+    "getNotes"
+] as const;
 
 
 const api = {
