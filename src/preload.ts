@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
 import "./components/Headbar/preload";
 
@@ -38,7 +38,7 @@ const api = {
         if(!validSendChannels.includes(channel)) return;
         ipcRenderer.send(channel, ...args);
     },
-    on(channel: typeof validOnChannels[number], callback: (...args: any[]) => void) {
+    on(channel: typeof validOnChannels[number], callback: (event: IpcRendererEvent, ...args: any[]) => void) {
         if(!validOnChannels.includes(channel)) return;
         ipcRenderer.on(channel, callback);
     },
