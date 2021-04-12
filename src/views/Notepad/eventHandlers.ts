@@ -14,20 +14,21 @@ ipcMain.on("getNotes", (event, date: string, userId: string) => {
         
         const column = Column.findByPk(`notes-${date}_${userId}`);
         if(!column) return event.reply("getNotes", JSON.stringify(data));
-        const notes = Note.findAll([{columnId: column.id}]);
+        const notes = Note.findAll([{column_id: column.id}]);
         if(!notes) return event.reply("getNotes", JSON.stringify(data));
 
         const rows: notesData["columns"][string]["rows"] = {};
-        for (const { noteId, text, type } of notes) {
-            rows[noteId] = {
-                id: noteId,
+        for (const { id, note_id, text, type } of notes) {
+            rows[note_id] = {
+                dbId: id,
+                noteId: note_id,
                 text: text,
                 type: noteTypesEnum[type.toUpperCase()]
             }
         }
         data.columns[column.id] = {
             id: column.id,
-            idOrder: column.idOrder.split(","),
+            idOrder: column.id_order.split(","),
             title: column.title,
             rows: rows
         }
@@ -46,26 +47,26 @@ ipcMain.on("setNotes", (_, data: notesData, userId: string) => {
                 Column.upsert({
                     id: columnId,
                     title: column.title,
-                    idOrder: column.idOrder.join(","),
-                    userId: userId,
+                    id_order: column.idOrder.join(","),
+                    user_id: userId,
                     updatedAt: formatDate(),
                     createdAt: formatDate()
                 });
                 
                 //INSERTING OR UPDATING
-                const dbNotes = Note.findAll([{columnId: column.id}]);
+                const dbNotes = Note.findAll([{column_id: column.id}]);
                 for (const rowId in column.rows) {
                     if(column.rows.hasOwnProperty(rowId)) {
                         const row = column.rows[rowId];
-                        const dbNoteIndex = dbNotes.findIndex(n => n.noteId === rowId);
+                        const dbNoteIndex = dbNotes.findIndex(n => n.note_id === rowId);
 
                         Note.upsert({
                             id: dbNoteIndex > -1 ? dbNotes[dbNoteIndex].id : null,
-                            columnId: column.id,
-                            noteId: row.id,
+                            column_id: column.id,
+                            note_id: row.noteId,
                             text: row.text,
                             type: row.type,
-                            userId: userId,
+                            user_id: userId,
                             updatedAt: formatDate(),
                             createdAt: formatDate()
                         });
