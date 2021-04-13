@@ -1,5 +1,6 @@
 import React from 'react';
 import { Droppable } from "react-beautiful-dnd";
+import { inlineData } from "./InlineEdit";
 
 import Note, { noteTypesEnum } from "./Note";
 
@@ -29,7 +30,12 @@ function Notes(props: NotesProps) {
                 text={note.data}
                 onSetNote={({ data, type }) => {
                   const index = props.notes.findIndex(n => n.noteId === note.noteId);
-                  if (data.length === 0) {
+                  const jsonData: Object = data.startsWith("{") ? JSON.parse(data) : null;
+                  if (data.length === 0 || (
+                    jsonData &&
+                    jsonData.hasOwnProperty(nameof<inlineData>(i => i.text)) &&
+                    (jsonData as inlineData).text.length === 0)
+                  ) {
                     const newNotes = Array.from(props.notes);
                     newNotes.splice(index, 1);
                     return props.setNotes([...newNotes]);
