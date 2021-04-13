@@ -39,7 +39,6 @@ function Notepad({ userId }: BasicViewProps) {
           idOrder: ["note-0"],
           rows: {
             "note-0": {
-              dbId: null,
               noteId: "note-0",
               data: "Edit ME or add new note to create notes for this date!",
               type: noteTypesEnum.NOTE

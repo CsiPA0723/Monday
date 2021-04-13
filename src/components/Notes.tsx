@@ -4,7 +4,7 @@ import { inlineData } from "./InlineEdit";
 
 import Note, { noteTypesEnum } from "./Note";
 
-export type noteData = { dbId: number; noteId: string, type: noteTypesEnum, data: string; };
+export type noteData = { noteId: string, type: noteTypesEnum, data: string; };
 
 type NotesProps = {
   notesId: string;
@@ -60,7 +60,6 @@ function Notes(props: NotesProps) {
           const noteNumber = splittedLastNoteId && splittedLastNoteId[1] || "-1";
           const newNoteId = `${noteName}-${parseInt(noteNumber) + 1}`;
           newNotes.push({
-            dbId: null,
             noteId: newNoteId,
             data: "Edit me!",
             type: noteTypesEnum.NOTE
