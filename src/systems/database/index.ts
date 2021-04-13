@@ -48,7 +48,7 @@ export function debug() {
         user_id: user.id,
         column_id: column.id,
         note_id: "note-0",
-        data: "Test1",
+        data: JSON.stringify({ text: "Test1" }),
         type: "head",
         updatedAt: formatDate(),
         createdAt: formatDate() 
@@ -59,7 +59,7 @@ export function debug() {
             user_id: user.id,
             column_id: column.id,
             note_id: `note-${i}`,
-            data: "Testing",
+            data: JSON.stringify({ text: "Testing" }),
             type: "note",
             updatedAt: formatDate(),
             createdAt: formatDate()
@@ -95,7 +95,7 @@ export function debug() {
         user_id: user1.id,
         column_id: column1.id,
         note_id: "note-0",
-        data: "Test1",
+        data: JSON.stringify({ text: "Test1" }),
         type: "head",
         updatedAt: formatDate(),
         createdAt: formatDate() 
