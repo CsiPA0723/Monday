@@ -17,7 +17,6 @@ export default function buildColumnsFrom(modelAttributes: ModelAttributes<any>) 
                 const { foreignKey, table } = references;
                 foreignKeys.push(key);
                 foreignReferences.push(`${table} (${foreignKey})`);
-                //foreignString = ` FOREIGN KEY (${key}) REFERENCES ${table} (${foreignKey})`;
             }
             tableArrString.push(string);
         }
