@@ -40,7 +40,7 @@ function Notepad({ userId }: BasicViewProps) {
           rows: {
             "note-0": {
               noteId: "note-0",
-              data: "Edit ME or add new note to create notes for this date!",
+              data: JSON.stringify({ text: "Edit ME or add new note to create notes for this date!" }),
               type: noteTypesEnum.NOTE
             }
           },

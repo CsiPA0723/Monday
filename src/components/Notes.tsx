@@ -61,7 +61,7 @@ function Notes(props: NotesProps) {
           const newNoteId = `${noteName}-${parseInt(noteNumber) + 1}`;
           newNotes.push({
             noteId: newNoteId,
-            data: "Edit me!",
+            data: JSON.stringify({ text: "Edit me!" }),
             type: noteTypesEnum.NOTE
           });
           props.setNotes([...newNotes]);
