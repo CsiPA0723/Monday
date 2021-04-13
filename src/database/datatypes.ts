@@ -1,8 +1,8 @@
 import Sqlite from "better-sqlite3";
-import buildColumnsFrom from "../../utils/buildColumnsFrom";
-import buildUpdateSetsFrom from "../../utils/buildUpdateSetsFrom";
-import buildUpsertSetsFrom from "../../utils/buildUpsertSetsFrom";
-import buildWhereClauseFrom from "../../utils/buildWhereClauseFrom";
+import buildColumnsFrom from "../utils/buildColumnsFrom";
+import buildUpdateSetsFrom from "../utils/buildUpdateSetsFrom";
+import buildUpsertSetsFrom from "../utils/buildUpsertSetsFrom";
+import buildWhereClauseFrom from "../utils/buildWhereClauseFrom";
 
 export enum DataTypes {
     BOOLEAN = "INTEGER",

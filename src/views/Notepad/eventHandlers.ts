@@ -1,6 +1,6 @@
 import { dialog, ipcMain } from "electron";
 import { noteTypesEnum } from "../../components/Note";
-import { Column, Note } from "../../systems/database";
+import { Column, Note } from "../../database";
 import formatDate from "../../utils/formatDate";
 
 import { notesData } from "./";

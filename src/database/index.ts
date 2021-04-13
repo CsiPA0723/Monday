@@ -8,8 +8,8 @@ import { ColumnFactory } from "./models/column";
 
 import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
-import randomBackupCode from "../../utils/randomBackupCode";
-import formatDate from "../../utils/formatDate";
+import randomBackupCode from "../utils/randomBackupCode";
+import formatDate from "../utils/formatDate";
 
 const isDebug = process.argv.some(v => /--debug/.test(v)); // npm run debug
 

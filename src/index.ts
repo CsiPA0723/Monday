@@ -6,7 +6,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 const debug = process.argv.some(v => /--debug/.test(v)); // npm run debug
 const dev = process.argv.some(v => /--dev/.test(v)); // npm run debug:dev
 
-import Database from "./systems/database";
+import Database from "./database";
 import "./eventHandlers";
 
 let mainWindow: BrowserWindow;

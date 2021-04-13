@@ -1,6 +1,6 @@
 import { dialog, ipcMain } from "electron";
-import { User, UserSettings } from "./systems/database";
-import { UserSettingsStatic } from "./systems/database/models/user_settings";
+import { User, UserSettings } from "./database";
+import { UserSettingsStatic } from "./database/models/user_settings";
 
 import "./components/Headbar/eventHandlers";
 import "./views/Login/eventHandlers";

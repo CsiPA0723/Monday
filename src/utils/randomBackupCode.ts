@@ -1,4 +1,4 @@
-import { database } from "../systems/database";
+import { database } from "../database";
 
 export default function randomBackupCode() {
     const codes = <string[]>database.prepare("SELECT backupCode FROM users;").all();

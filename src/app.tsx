@@ -4,7 +4,7 @@ import "./assets/scss/app.scss";
 import SideBar from "./components/Sidebar";
 import Content from "./components/Content"
 import Login from "./views/Login";
-import { UserSettingsStatic } from "./systems/database/models/user_settings";
+import { UserSettingsStatic } from "./database/models/user_settings";
 
 type Views = "Calendar"|"Home"|"Notepad"|"User";
 

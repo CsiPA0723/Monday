@@ -1,5 +1,5 @@
 import { dialog, ipcMain, BrowserWindow } from "electron";
-import { User } from "../../systems/database";
+import { User } from "../../database";
 import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
 import formatDate from "../../utils/formatDate";
