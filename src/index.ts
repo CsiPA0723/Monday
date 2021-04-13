@@ -3,8 +3,7 @@ import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-insta
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 
-const debug = process.argv.some(v => /--debug/.test(v)); // npm run debug
-const dev = process.argv.some(v => /--dev/.test(v)); // npm run debug:dev
+const debug = process.argv.some(v => /--dev/.test(v)); // npm run debug
 
 import Database from "./database";
 import "./eventHandlers";
@@ -36,9 +35,6 @@ const createWindow = (): void => {
 
     // and load the index.html of the app.
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-    // Open the DevTools.
-    if (debug && dev) mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished

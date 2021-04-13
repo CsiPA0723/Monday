@@ -11,7 +11,7 @@ import crypto from "crypto";
 import randomBackupCode from "../utils/randomBackupCode";
 import formatDate from "../utils/formatDate";
 
-const isDebug = process.argv.some(v => /--debug/.test(v)); // npm run debug
+const isDebug = process.argv.some(v => /--dev/.test(v)); // npm run debug
 
 export const database = new Sqlite(path.join(__dirname, "database.sqlite"), { verbose: isDebug ? console.log : null });
 database.pragma("synchronous = 1");
