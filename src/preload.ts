@@ -14,7 +14,10 @@ const validSendChannels = [
     "setActiveUser",
 
     "setNotes",
-    "getNotes"
+    "getNotes",
+
+    "getFood",
+    "setFood"
 ] as const;
 
 const validOnChannels = [
@@ -22,9 +25,10 @@ const validOnChannels = [
     "registerUser",
 
     "getUserSettings",
-    "setActiveUser",
 
-    "getNotes"
+    "getNotes",
+
+    "getFood"
 ] as const;
 
 
