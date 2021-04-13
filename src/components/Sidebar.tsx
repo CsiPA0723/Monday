@@ -7,13 +7,13 @@ type SideBarProps = {
 };
 
 function SideBar({ view, setView }: SideBarProps) {
-  async function handleActiveButton() {
+  function handleActiveButton() {
     const button = document.getElementsByClassName("active")[0];
     if(button) button.className = "";
     document.getElementById(view).className = "active";
   }
 
-  useEffect(() => {handleActiveButton()}, [view]);
+  useEffect(handleActiveButton, [view]);
 
   return (
     <div className="sidebar">
@@ -21,6 +21,7 @@ function SideBar({ view, setView }: SideBarProps) {
       <SideBarButton id="Notepad" onClick={() => {setView("Notepad");handleActiveButton();}}/>
       <SideBarButton id="Calendar" onClick={() => {setView("Calendar");handleActiveButton();}}/>
       <SideBarButton id="User" onClick={() => {setView("User");handleActiveButton();}}/>
+      <SideBarButton id="About" onClick={() => {setView("About");handleActiveButton();}}/>
     </div>
   );
 }
