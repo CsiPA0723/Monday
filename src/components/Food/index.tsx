@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { noteData } from "./Note";
+import { noteData } from "../Note";
 
 type FoodProps = {
     note: noteData;
@@ -55,9 +55,9 @@ function Food(props: FoodProps) {
         </div>
       </div>
       <div className="FCP-container">
-        <div>{`100 Fat`}</div>
-        <div>{`100 Carbs`}</div>
-        <div>{`100 Protein`}</div>
+        <div>{`${100} Fats`}</div>
+        <div>{`${100} Carbs`}</div>
+        <div>{`${100} Proteins`}</div>
       </div>
       <div className="kcal">{`100 kcal`}</div>
     </div>
