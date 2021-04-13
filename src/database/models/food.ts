@@ -4,10 +4,10 @@ type FoodAttributes = {
     id: number;
     name: string;
     amount: string;
-    calories: number;
-    fat: number;
-    carbonhydrate: number;
-    protein: number;
+    kcal: number;
+    fats: number;
+    carbs: number;
+    proteins: number;
 };
 
 export type FoodStatic = BuildStatic<FoodAttributes>;
@@ -29,19 +29,19 @@ class FoodModel extends Model<FoodAttributes> {
             type: DataTypes.STRING,
             allowNull: false
         },
-        calories: {
+        kcal: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        fat: {
+        fats: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        carbonhydrate: {
+        carbs: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        protein: {
+        proteins: {
             type: DataTypes.INTEGER,
             allowNull: false
         }

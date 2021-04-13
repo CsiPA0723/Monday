@@ -17,14 +17,48 @@
 
     .label-input-container {
       grid-area: labelInput;
+      margin-right: 5px;
+      padding-right: 5px;
+      border-right: 1px solid colors.$border;
 
       // positioning context
       div.label-input {
         position: relative;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid colors.$input-border-bottom;
+
+        $inputWidth: 30ch;
+
+        & + div[role="listbox"] { // suggestions
+          width: $inputWidth - 4;
+          position: fixed;
+          background-color: colors.$background;
+          z-index: 1000;
+
+          &[class*="open"] { // suggetions list container open
+            padding: 4px;
+            border: 1px solid colors.$input-border-bottom;
+
+            ul { // suggetions list
+              list-style: none;
+              padding: 1px;
+              margin: auto;
+  
+              div { // suggestion child
+                border: 1px solid colors.$input-border-bottom;
+                padding: 4px;
+    
+                &:hover {
+                  background-color: colors.$activeInput;
+                  cursor: pointer;
+                  user-select: none;
+                }
+              }
+            }
+          }
+        }
 
         // Looks like placeholder
-        > label {
+        label {
           opacity: 0.3;
           font-weight: bold;
           position: absolute;
@@ -33,8 +67,8 @@
           color: colors.$text;
         }
 
-        > input[type="text"] {
-          width: 100%;
+        input[type="text"] {
+          width: $inputWidth;
           border: 0;
           padding: 20px;
           background: colors.$background;
@@ -86,20 +120,24 @@
 
     .FCP-container {
       grid-area: FCP;
-      div { 
+      padding: 0;
+
+      div {
         border-bottom: 1px solid colors.$border;
         padding: 4px;
+        text-align: right;
       }
+
       :last-child { border-bottom: none; }
-      margin-left: 5px;
     }
 
     .kcal {
       grid-area: kcal;
-      margin-left: 5px;
       padding: 4px;
       width: 100%;
       background-color: colors.$button-active-bg;
+      text-align: right;
+
     }
   }
 }

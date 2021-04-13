@@ -28,7 +28,7 @@ div.login {
     // positioning context
     > div {
       position: relative;
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid colors.$input-border-bottom;
 
       // Looks like placeholder
       > label:not([for="remember_me"]) {

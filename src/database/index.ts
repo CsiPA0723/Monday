@@ -106,6 +106,95 @@ export function debug() {
         id_order: ["note-0"].join(","),
         updatedAt: formatDate()
     });
+
+    Food.create({
+        id: null,
+        amount: "100g",
+        name: "Test kaja",
+        kcal: 120,
+        carbs: 25,
+        fats: 21,
+        proteins: 12,
+        updatedAt: formatDate(),
+        createdAt: formatDate()
+    });
+    Food.create({
+        id: null,
+        amount: "192g",
+        name: "kaja 2",
+        kcal: 65,
+        carbs: 2,
+        fats: 31,
+        proteins: 2,
+        updatedAt: formatDate(),
+        createdAt: formatDate()
+    });
+    Food.create({
+        id: null,
+        amount: "100g",
+        name: "Test kaja 3",
+        kcal: 120,
+        carbs: 25,
+        fats: 21,
+        proteins: 12,
+        updatedAt: formatDate(),
+        createdAt: formatDate()
+    });
+    Food.create({
+        id: null,
+        amount: "192g",
+        name: "kaja 4",
+        kcal: 65,
+        carbs: 2,
+        fats: 31,
+        proteins: 2,
+        updatedAt: formatDate(),
+        createdAt: formatDate()
+    });
+    Food.create({
+        id: null,
+        amount: "100g",
+        name: "Test kaja 5",
+        kcal: 120,
+        carbs: 25,
+        fats: 21,
+        proteins: 12,
+        updatedAt: formatDate(),
+        createdAt: formatDate()
+    });
+    Food.create({
+        id: null,
+        amount: "192g",
+        name: "kaja 6",
+        kcal: 65,
+        carbs: 2,
+        fats: 31,
+        proteins: 2,
+        updatedAt: formatDate(),
+        createdAt: formatDate()
+    });
+    Food.create({
+        id: null,
+        amount: "100g",
+        name: "Test kaja 7",
+        kcal: 120,
+        carbs: 25,
+        fats: 21,
+        proteins: 12,
+        updatedAt: formatDate(),
+        createdAt: formatDate()
+    });
+    Food.create({
+        id: null,
+        amount: "192g",
+        name: "kaja 8",
+        kcal: 65,
+        carbs: 2,
+        fats: 31,
+        proteins: 2,
+        updatedAt: formatDate(),
+        createdAt: formatDate()
+    });
 }
 
 export default {
