@@ -18,9 +18,8 @@ ipcMain.on("getNotes", (event, date: string, userId: string) => {
         if(!notes) return event.reply("getNotes", JSON.stringify(data));
 
         const rows: notesData["columns"][string]["rows"] = {};
-        for (const { id, note_id, data, type } of notes) {
+        for (const { note_id, data, type } of notes) {
             rows[note_id] = {
-                dbId: id,
                 noteId: note_id,
                 data: data,
                 type: noteTypesEnum[type.toUpperCase()]
