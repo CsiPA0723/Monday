@@ -6,8 +6,7 @@
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
-    "debug": "electron-forge start -- --debug",
-    "debug:dev": "electron-forge start -- --debug --dev",
+    "dev": "electron-forge start -- --dev",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
