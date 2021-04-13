@@ -3,7 +3,7 @@ import { Droppable } from "react-beautiful-dnd";
 
 import Note, { noteTypesEnum } from "./Note";
 
-export type noteData = { dbId: number; noteId: string, type: noteTypesEnum, text: string; };
+export type noteData = { dbId: number; noteId: string, type: noteTypesEnum, data: string; };
 
 type NotesProps = {
   notesId: string;
@@ -23,19 +23,18 @@ function Notes(props: NotesProps) {
             {props.notes.map((note, index) => (
               <Note
                 key={note.noteId}
-                noteDBId={note.dbId}
                 index={index}
                 noteId={note.noteId}
                 noteType={note.type}
-                text={note.text}
-                onSetNote={({ text, type }: {text: string, type: noteTypesEnum}) => {
+                text={note.data}
+                onSetNote={({ data, type }) => {
                   const index = props.notes.findIndex(n => n.noteId === note.noteId);
-                  if (text.length === 0) {
+                  if (data.length === 0) {
                     const newNotes = Array.from(props.notes);
                     newNotes.splice(index, 1);
                     return props.setNotes([...newNotes]);
                   }
-                  props.notes[index].text = text;
+                  props.notes[index].data = data;
                   props.notes[index].type = type;
                   props.setNotes([...props.notes]);
                 }}
@@ -57,7 +56,7 @@ function Notes(props: NotesProps) {
           newNotes.push({
             dbId: null,
             noteId: newNoteId,
-            text: "Edit me!",
+            data: "Edit me!",
             type: noteTypesEnum.NOTE
           });
           props.setNotes([...newNotes]);

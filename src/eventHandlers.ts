@@ -3,7 +3,6 @@ import { User, UserSettings } from "./systems/database";
 import { UserSettingsStatic } from "./systems/database/models/user_settings";
 
 import "./components/Headbar/eventHandlers";
-import "./components/Food/eventHandlers";
 import "./views/Login/eventHandlers";
 import "./views/Notepad/eventHandlers";
 

@@ -41,7 +41,7 @@ function Notepad({ userId }: BasicViewProps) {
             "note-0": {
               dbId: null,
               noteId: "note-0",
-              text: "Edit ME or add new note to create notes for this date!",
+              data: "Edit ME or add new note to create notes for this date!",
               type: noteTypesEnum.NOTE
             }
           },

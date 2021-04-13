@@ -1,17 +1,24 @@
-import React, { useEffect, useRef } from "react";
-import { noteTypesEnum } from "./Note";
+import React, { useEffect, useRef, useState } from "react";
+import { noteData } from "./Note";
 
 type InlineEditProps = {
   component: any;
-  note: { text: string, type: noteTypesEnum };
+  note: noteData;
   isInputActive: boolean;
-  onSetNote: ({ text, type }: {text: string, type: noteTypesEnum}) => void;
+  onSetNote: ({ data: text, type }: noteData) => void;
   onSetIsFocused: (value: boolean) => void;
 };
+
+type inlineData = { text: string };
 
 function InlineEdit(props: InlineEditProps) {
   const textRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [inline, setInline] = useState<inlineData>({
+    text: props.note.data.includes("text") ? (
+      (JSON.parse(props.note.data) as inlineData).text
+    ) : "Edit me!"
+  });
   
   function updateStyle() {
     const textStyle = getComputedStyle(textRef.current);
@@ -23,9 +30,8 @@ function InlineEdit(props: InlineEditProps) {
   useEffect(updateStyle, [textRef, inputRef, props.note]);
   
   useEffect(() => {
-    updateStyle();
-    props.onSetNote({ text: props.note.text, type: props.note.type });
-  }, [props.note.text]);
+    props.onSetNote({ data: JSON.stringify(inline), type: props.note.type });
+  }, [inline]);
 
   return (
     <>
@@ -35,13 +41,13 @@ function InlineEdit(props: InlineEditProps) {
           ref: textRef,
           className: "editable",
           hidden: props.isInputActive
-        }, props.note.text
+        }, inline.text
       )}
       <input
         ref={inputRef}
-        value={props.note.text}
+        value={inline.text}
         onClick={() => props.onSetIsFocused(true)}
-        onChange={e => props.onSetNote({...props.note, text: e.target.value})}
+        onChange={e => setInline({ text: e.target.value })}
         hidden={!props.isInputActive}
         className={`editable ${props.isInputActive ? "inputIsActive" : ""}`}
       />

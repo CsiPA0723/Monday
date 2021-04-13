@@ -18,11 +18,11 @@ ipcMain.on("getNotes", (event, date: string, userId: string) => {
         if(!notes) return event.reply("getNotes", JSON.stringify(data));
 
         const rows: notesData["columns"][string]["rows"] = {};
-        for (const { id, note_id, text, type } of notes) {
+        for (const { id, note_id, data, type } of notes) {
             rows[note_id] = {
                 dbId: id,
                 noteId: note_id,
-                text: text,
+                data: data,
                 type: noteTypesEnum[type.toUpperCase()]
             }
         }
@@ -64,7 +64,7 @@ ipcMain.on("setNotes", (_, data: notesData, userId: string) => {
                             id: dbNoteIndex > -1 ? dbNotes[dbNoteIndex].id : null,
                             column_id: column.id,
                             note_id: row.noteId,
-                            text: row.text,
+                            data: row.data,
                             type: row.type,
                             user_id: userId,
                             updatedAt: formatDate(),

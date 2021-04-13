@@ -7,12 +7,16 @@ import InlineEdit from "./InlineEdit";
 import Food from "./Food";
 
 export type NoteProps = {
-  noteDBId: number;
   noteId: string;
   index: number;
   noteType: noteTypesEnum
   text: string;
-  onSetNote: ({ text, type }: {text: string, type: noteTypesEnum}) => void;
+  onSetNote: ({ data, type }: noteData) => void;
+};
+
+export type noteData = {
+  data: string;
+  type: noteTypesEnum
 };
 
 const Container = styled.div<{ isDragging: boolean; noteType: keyof typeof noteTypes; }>`
@@ -29,7 +33,7 @@ export enum noteTypesEnum {
   FOOD = "food",
   // SPORT = "sport",
   // TASK = "task"
-}
+};
 
 export const noteTypes = {
   "note": styled.div`
@@ -60,7 +64,7 @@ function createNoteTypeOptions() {
 function Note(props: NoteProps) {
   const [isInputActive, setIsInputActive] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const [note, setNote] = useState({ text: props.text, type: props.noteType });
+  const [note, setNote] = useState<noteData>({ data: props.text, type: props.noteType });
 
   const enter = useKeyPress("Enter");
   const esc = useKeyPress("Escape");
@@ -82,7 +86,7 @@ function Note(props: NoteProps) {
         setIsFocused(false);
       }
       if (esc) {
-        setNote({ text: props.text, type: props.noteType });
+        setNote({ data: props.text, type: props.noteType });
         setIsInputActive(false);
         setIsFocused(false);
       }
@@ -132,8 +136,9 @@ function Note(props: NoteProps) {
                 />
               ) : (
                 <Food
-                  noteDBId={props.noteDBId}
+                  note={note}
                   isInputActive={isInputActive}
+                  onSetNote={(note) => setNote(note)}
                   onSetIsFocused={(v) => setIsFocused(v)}
                 />
               )
@@ -142,7 +147,7 @@ function Note(props: NoteProps) {
               type="button"
               className="delete-note"
               hidden={!isInputActive}
-              onClick={() => props.onSetNote({text: "", type: null})}
+              onClick={() => props.onSetNote({data: "", type: null})}
             >
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentcolor">
                 <path d="M0 0h24v24H0V0z" fill="none"/>

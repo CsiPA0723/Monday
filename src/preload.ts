@@ -13,9 +13,6 @@ const validSendChannels = [
     "setUserSettings",
     "setActiveUser",
 
-    "getEaten",
-    "setEaten",
-
     "setNotes",
     "getNotes"
 ] as const;
@@ -27,8 +24,6 @@ const validOnChannels = [
     "getUserSettings",
     "setActiveUser",
 
-    "getEaten",
-
     "getNotes"
 ] as const;
 
@@ -38,13 +33,13 @@ const api = {
         if(!validSendChannels.includes(channel)) return;
         ipcRenderer.send(channel, ...args);
     },
-    on(channel: typeof validOnChannels[number], callback: (event: IpcRendererEvent, ...args: any[]) => void) {
+    on(channel: typeof validOnChannels[number], listener: (event: IpcRendererEvent, ...args: any[]) => void) {
         if(!validOnChannels.includes(channel)) return;
-        ipcRenderer.on(channel, callback);
+        ipcRenderer.on(channel, listener);
     },
-    off(channel: typeof validOnChannels[number], callback: (...args: any[]) => void) {
+    off(channel: typeof validOnChannels[number], listener: (...args: any[]) => void) {
         if(!validOnChannels.includes(channel)) return;
-        ipcRenderer.off(channel, callback);
+        ipcRenderer.off(channel, listener);
     }
 };
 

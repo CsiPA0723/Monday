@@ -1,4 +1,5 @@
 import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
+import { UserFactory } from "./user";
 
 type ColumnAttributes = {
     id: string;
@@ -19,8 +20,8 @@ class ColumnModel extends Model<ColumnAttributes> {
         user_id: {
             type: DataTypes.UUIDV4,
             references: {
-                table: "users",
-                foreignKey: "id"
+                table: UserFactory.tableName,
+                foreignKey: nameof(UserFactory.model.id)
             },
             allowNull: false,
         },

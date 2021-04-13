@@ -1,17 +1,28 @@
-import React, { useEffect } from "react";
-import { noteTypesEnum } from "../Note";
+import React, { useEffect, useState } from "react";
+import { noteData } from "./Note";
 
 type FoodProps = {
-  note: { text: string, type: noteTypesEnum; };
-  isInputActive: boolean;
-  onSetNote: ({ text, type }: { text: string, type: noteTypesEnum; }) => void;
-  onSetIsFocused: (value: boolean) => void;
+    note: noteData;
+    isInputActive: boolean;
+    onSetNote: ({ data, type }: noteData) => void;
+    onSetIsFocused: (value: boolean) => void;
 };
 
+export type foodData = { name: string, amount: string };
+
 function Food(props: FoodProps) {
+  const [food, setFood] = useState<foodData>({
+    name: props.note.data.includes(nameof<foodData>(f => f.name)) ? (
+        (JSON.parse(props.note.data) as foodData).name
+    ) : "",
+    amount: props.note.data.includes(nameof<foodData>(f => f.amount)) ?  (
+        (JSON.parse(props.note.data) as foodData).amount
+    ) : ""
+  });
+
   useEffect(() => {
-    props.onSetNote({ text: props.note.text, type: props.note.type });
-  }, [props.note.text]);
+    props.onSetNote({...props.note, data: JSON.stringify(food)});
+  }, [food]);
 
   return (
     <div className="food">
@@ -23,9 +34,9 @@ function Food(props: FoodProps) {
             id="text"
             placeholder=" "
             required
-            value={props.note.text}
+            value={food.name}
             onClick={() => props.onSetIsFocused(true)}
-            onChange={e => props.onSetNote({ ...props.note, text: e.target.value })}
+            onChange={e => setFood({...food, name: e.target.value})}
           />
           <label htmlFor="text">Food</label>
         </div>
@@ -36,9 +47,9 @@ function Food(props: FoodProps) {
             id="amount"
             placeholder=" "
             required
-            value={props.note.text}
+            value={food.amount}
             onClick={() => props.onSetIsFocused(true)}
-            onChange={e => props.onSetNote({ ...props.note, text: e.target.value })}
+            onChange={e => setFood({...food, amount: e.target.value})}
           />
           <label htmlFor="amount">Amount</label>
         </div>

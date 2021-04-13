@@ -1,4 +1,5 @@
 import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
+import { UserFactory } from "./user";
 
 type UserSettingsAttributes = {
     id: string;
@@ -14,8 +15,8 @@ class UserSettingsModel extends Model<UserSettingsAttributes> {
             type: DataTypes.UUIDV4,
             primaryKey: true,
             references: {
-                foreignKey: "id",
-                table: "user"
+                table: UserFactory.tableName,
+                foreignKey: nameof(UserFactory.model.id)
             }
         },
         name: { type: DataTypes.STRING }

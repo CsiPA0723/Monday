@@ -1,4 +1,6 @@
 import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
+import { ColumnFactory } from "./column";
+import { UserFactory } from "./user";
 
 type NoteAttributes = {
     id: number;
@@ -6,7 +8,7 @@ type NoteAttributes = {
     column_id: string;
     note_id: string;
     type: string;
-    text: string;
+    data: string;
 };
 
 export type NoteStatic = BuildStatic<NoteAttributes>;
@@ -22,16 +24,16 @@ class NoteModel extends Model<NoteAttributes> {
         user_id: {
             type: DataTypes.UUIDV4,
             references: {
-                table: "users",
-                foreignKey: "id",
+                table: UserFactory.tableName,
+                foreignKey: nameof(UserFactory.model.id)
             },
             allowNull: false,
         },
         column_id: {
             type: DataTypes.STRING,
             references: {
-                table: "columns",
-                foreignKey: "id",
+                table: ColumnFactory.tableName,
+                foreignKey: nameof(ColumnFactory.model.id)
             },
             allowNull: false
         },
@@ -43,8 +45,8 @@ class NoteModel extends Model<NoteAttributes> {
             type: DataTypes.STRING,
             allowNull: false
         },
-        text: {
-            type: DataTypes.STRING,
+        data: {
+            type: DataTypes.JSON,
             allowNull: false
         }
     };

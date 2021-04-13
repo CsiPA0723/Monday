@@ -1,3 +1,5 @@
+const tsNameof = require("ts-nameof");
+
 module.exports = [
   // Add support for native node modules
   {
@@ -20,7 +22,8 @@ module.exports = [
     use: {
       loader: 'ts-loader',
       options: {
-        transpileOnly: true
+        transpileOnly: true,
+        getCustomTransformers: () => ({ before: [tsNameof] }),
       }
     }
   },
