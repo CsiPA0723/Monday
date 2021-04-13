@@ -9,7 +9,7 @@ type InlineEditProps = {
   onSetIsFocused: (value: boolean) => void;
 };
 
-type inlineData = { text: string };
+export type inlineData = { text: string };
 
 function InlineEdit(props: InlineEditProps) {
   const textRef = useRef<HTMLDivElement>(null);
