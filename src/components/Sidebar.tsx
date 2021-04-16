@@ -19,8 +19,8 @@ function SideBar({ view, setView }: SideBarProps) {
     <div className="sidebar">
       <SideBarButton id="Home" onClick={() => {setView("Home");handleActiveButton();}}/>
       <SideBarButton id="Notepad" onClick={() => {setView("Notepad");handleActiveButton();}}/>
-      <SideBarButton id="Calendar" onClick={() => {setView("Calendar");handleActiveButton();}}/>
       <SideBarButton id="User" onClick={() => {setView("User");handleActiveButton();}}/>
+      <SideBarButton id="Foods" onClick={() => {setView("Foods");handleActiveButton();}}/>
       <SideBarButton id="About" onClick={() => {setView("About");handleActiveButton();}}/>
     </div>
   );

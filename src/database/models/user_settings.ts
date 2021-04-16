@@ -10,7 +10,7 @@ export type UserSettingsStatic = BuildStatic<UserSettingsAttributes>;
 
 class UserSettingsModel extends Model<UserSettingsAttributes> {
     public readonly tableName = "user_settings";
-    public readonly model = <ModelAttributes<UserSettingsAttributes>>{
+    public readonly model: ModelAttributes<UserSettingsAttributes> ={
         id: {
             type: DataTypes.UUIDV4,
             primaryKey: true,

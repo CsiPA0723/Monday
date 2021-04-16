@@ -6,6 +6,8 @@ body {
   margin: auto;
   color: colors.$text;
   background-color: colors.$background;
+  overflow-y: auto;
+  overflow-x: hidden;
   
   #root {
     .app-container {
@@ -14,9 +16,8 @@ body {
       #content {
         margin-left: variables.$sidebar-width;
         padding: 1px 16px;
-      }
-      @media screen and (max-width: 700px) {
-        #content {
+
+        @media screen and (max-width: variables.$media-max-width) {
           margin-left: 0;
         }
       }

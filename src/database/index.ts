@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
 import randomBackupCode from "../utils/randomBackupCode";
 import formatDate from "../utils/formatDate";
+import { noteTypes } from "../components/Note";
 
 const isDebug = process.argv.some(v => /--dev/.test(v)); // npm run debug
 
@@ -49,7 +50,7 @@ export function debug() {
         column_id: column.id,
         note_id: "note-0",
         data: JSON.stringify({ text: "Test1" }),
-        type: "head",
+        type: noteTypes.TITLE,
         updatedAt: formatDate(),
         createdAt: formatDate() 
     });
@@ -60,7 +61,7 @@ export function debug() {
             column_id: column.id,
             note_id: `note-${i}`,
             data: JSON.stringify({ text: "Testing" }),
-            type: "note",
+            type: noteTypes.NOTE,
             updatedAt: formatDate(),
             createdAt: formatDate()
         });
@@ -96,7 +97,7 @@ export function debug() {
         column_id: column1.id,
         note_id: "note-0",
         data: JSON.stringify({ text: "Test1" }),
-        type: "head",
+        type: noteTypes.TITLE,
         updatedAt: formatDate(),
         createdAt: formatDate() 
     });
@@ -109,6 +110,7 @@ export function debug() {
 
     Food.create({
         id: null,
+        user_id: user.id,
         amount: "100g",
         name: "Test kaja",
         kcal: 120,
@@ -120,6 +122,7 @@ export function debug() {
     });
     Food.create({
         id: null,
+        user_id: user.id,
         amount: "192g",
         name: "kaja 2",
         kcal: 65,
@@ -131,6 +134,7 @@ export function debug() {
     });
     Food.create({
         id: null,
+        user_id: user.id,
         amount: "100g",
         name: "Test kaja 3",
         kcal: 120,
@@ -142,6 +146,7 @@ export function debug() {
     });
     Food.create({
         id: null,
+        user_id: user.id,
         amount: "192g",
         name: "kaja 4",
         kcal: 65,
@@ -155,6 +160,7 @@ export function debug() {
         id: null,
         amount: "100g",
         name: "Test kaja 5",
+        user_id: user1.id,
         kcal: 120,
         carbs: 25,
         fats: 21,
@@ -166,6 +172,7 @@ export function debug() {
         id: null,
         amount: "192g",
         name: "kaja 6",
+        user_id: user1.id,
         kcal: 65,
         carbs: 2,
         fats: 31,
@@ -177,6 +184,7 @@ export function debug() {
         id: null,
         amount: "100g",
         name: "Test kaja 7",
+        user_id: user1.id,
         kcal: 120,
         carbs: 25,
         fats: 21,
@@ -187,6 +195,7 @@ export function debug() {
     Food.create({
         id: null,
         amount: "192g",
+        user_id: user1.id,
         name: "kaja 8",
         kcal: 65,
         carbs: 2,

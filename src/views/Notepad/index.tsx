@@ -3,7 +3,7 @@ import "../../assets/scss/notepad.scss";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 
 import Notes, { noteData } from "../../components/Notes";
-import { noteTypesEnum } from "../../components/Note";
+import { noteTypes } from "../../components/Note";
 import formatDate from "../../utils/formatDate";
 import BasicViewProps from "../BasicViewProps";
 
@@ -41,7 +41,7 @@ function Notepad({ userId }: BasicViewProps) {
             "note-0": {
               noteId: "note-0",
               data: JSON.stringify({ text: "Edit ME or add new note to create notes for this date!" }),
-              type: noteTypesEnum.NOTE
+              type: noteTypes.NOTE
             }
           },
           title: "Notes"

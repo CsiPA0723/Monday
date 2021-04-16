@@ -9,17 +9,17 @@ import Food from "./Food";
 export type NoteProps = {
   noteId: string;
   index: number;
-  noteType: noteTypesEnum
+  noteType: noteTypes
   text: string;
   onSetNote: ({ data, type }: noteData) => void;
 };
 
 export type noteData = {
   data: string;
-  type: noteTypesEnum
+  type: noteTypes
 };
 
-const Container = styled.div<{ isDragging: boolean; noteType: keyof typeof noteTypes; }>`
+const Container = styled.div<{ isDragging: boolean; }>`
   display: flex;
   background-color: #363544;
   align-items: center;
@@ -27,37 +27,43 @@ const Container = styled.div<{ isDragging: boolean; noteType: keyof typeof noteT
   outline-offset: 4px;
 `;
 
-export enum noteTypesEnum {
+export enum noteTypes {
   NOTE = "note",
-  HEAD = "head",
+  TITLE = "title",
   FOOD = "food",
   // SPORT = "sport",
   // TASK = "task"
 };
 
-export const noteTypes = {
-  "note": styled.div`
-    padding: 2px 10px;
-    margin-left: 10px;
-  `,
-  "head": styled.h1`
-    padding: 2px 10px;
-    margin: 5px 0px 5px 5px;
-    border-bottom: 1px solid #72767d; margin-bottom: 10px;
-  `,
-  "food": styled.div``,
-  // "sport": styled.div``,
-  // "task": styled.div``
-} as const;
+const noteTypeMap = new Map([
+  [
+    noteTypes.NOTE,
+    styled.div`
+      padding: 2px 10px;
+      margin-left: 10px;
+    `
+  ],
+  [
+    noteTypes.TITLE,
+    styled.h1`
+      padding: 2px 10px;
+      margin: 5px 0px 5px 5px;
+      border-bottom: 1px solid #72767d; margin-bottom: 10px;
+    `
+  ],
+  [noteTypes.FOOD, styled.div``],
+  // [noteTypesEnum.SPORT, styled.div``],
+  // [noteTypesEnum.TASK, styled.div``],
+]);
 
 function createNoteTypeOptions() {
   const array: {value: string, text: string}[] = [];
-  for (const noteType in noteTypes) {
+  noteTypeMap.forEach((_, noteType) => {
     array.push({
       value: noteType.toUpperCase(),
       text: noteType[0].toUpperCase()+noteType.slice(1)
     });
-  }
+  });
   return array;
 }
 
@@ -101,7 +107,6 @@ function Note(props: NoteProps) {
             {...provided.draggableProps}
             ref={provided.innerRef}
             isDragging={snapshot.isDragging}
-            noteType={note.type}
             onMouseOut={() => { if (!isFocused) setIsInputActive(false); }}
             onMouseOver={() => { if (!isFocused && !snapshot.isDragging) setIsInputActive(true); }}
           >
@@ -109,7 +114,7 @@ function Note(props: NoteProps) {
               <select
                 name="noteTypeSelect"
                 id="noteTypeSelect"
-                onChange={(e) => setNote({...note, type: noteTypesEnum[e.target.value]})}
+                onChange={(e) => setNote({...note, type: noteTypes[e.target.value]})}
                 value={note.type.toUpperCase()}
               >
                 {createNoteTypeOptions().map(({ value, text }, i) => (
@@ -126,9 +131,9 @@ function Note(props: NoteProps) {
                 <path fillRule="evenodd" clipRule="evenodd" d="M0 1.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 8a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM1.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM4 1.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 8a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM5.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" fill="#72767d"></path>
               </svg>
             </div>
-            {note.type !== noteTypesEnum.FOOD ? (
+            {note.type !== noteTypes.FOOD ? (
                 <InlineEdit
-                  component={noteTypes[note.type]}
+                  component={noteTypeMap.has(note.type) ? noteTypeMap.get(note.type) : "div"}
                   note={note}
                   isInputActive={isInputActive}
                   onSetNote={(note) => setNote(note)}

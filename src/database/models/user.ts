@@ -29,7 +29,7 @@ class UserModel extends Model<UserAttributes> {
         remember_me: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: false,
+            defaultValue: 0,
         },
         backupCode: {
             type: DataTypes.STRING,

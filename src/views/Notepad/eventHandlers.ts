@@ -1,5 +1,5 @@
 import { dialog, ipcMain } from "electron";
-import { noteTypesEnum } from "../../components/Note";
+import { noteTypes } from "../../components/Note";
 import { Column, Note } from "../../database";
 import formatDate from "../../utils/formatDate";
 
@@ -22,7 +22,7 @@ ipcMain.on("getNotes", (event, date: string, userId: string) => {
             rows[note_id] = {
                 noteId: note_id,
                 data: data,
-                type: noteTypesEnum[type.toUpperCase()]
+                type: noteTypes[type.toUpperCase()]
             }
         }
         data.columns[column.id] = {

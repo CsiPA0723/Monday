@@ -25,12 +25,11 @@
   button:hover:not(.active) {
     background-color: colors.$button-hover-bg;
   }
-}
 
-@media screen and (max-width: 700px) {
-  .sidebar {
+  @media screen and (max-width: variables.$media-max-width) {
     width: 100%;
     height: auto;
     position: relative;
+    overflow: auto;
   }
 }

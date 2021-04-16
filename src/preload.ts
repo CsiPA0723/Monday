@@ -16,6 +16,7 @@ const validSendChannels = [
     "setNotes",
     "getNotes",
 
+    "getSuggestedFoods",
     "getFood",
     "setFood"
 ] as const;
@@ -28,7 +29,8 @@ const validOnChannels = [
 
     "getNotes",
 
-    "getFood"
+    "getSuggestedFoods",
+    "getFood",
 ] as const;
 
 

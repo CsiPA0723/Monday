@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AutoSuggest from "react-autosuggest";
 import { noteData } from "../Note";
 import { FoodStatic } from "../../database/models/food";
@@ -22,23 +22,28 @@ function Food(props: FoodProps) {
 
   useEffect(() => {
     props.onSetNote({ ...props.note, data: JSON.stringify(food) });
+  }, [food]);
 
+  useEffect(() => {
+    console.log("sugg effect");
     function handleGetFood(_, suggestedFoods: FoodStatic[]) {
+      console.log(suggestedFoods)
       setSuggestions(suggestedFoods);
     }
 
-    window.api.on("getFood", handleGetFood);
+    window.api.on("getSuggestedFoods", handleGetFood);
     return () => {
-      window.api.off("getFood", handleGetFood);
+      console.log("sugg effect off");
+      window.api.off("getSuggestedFoods", handleGetFood);
     };
-  }, [food]);
+  }, []);
 
   return (
     <div className="food">
       <div className="label-input-container">
-      <AutoSuggest
+        <AutoSuggest
           suggestions={suggestions}
-          onSuggestionsFetchRequested={({ value }) => window.api.send("getFood", value)}
+          onSuggestionsFetchRequested={({ value }) => window.api.send("getSuggestedFoods", value)}
           onSuggestionsClearRequested={() => setSuggestions([])}
           onSuggestionSelected={(_, { suggestion }) => setSelectedFood(suggestion)}
           getSuggestionValue={suggestion => suggestion.name}
@@ -55,7 +60,7 @@ function Food(props: FoodProps) {
           }}
           renderInputComponent={(props) => (
             <div className="label-input">
-              <input {...props}/>
+              <input {...props} />
               <label htmlFor="text">Food</label>
             </div>
           )}

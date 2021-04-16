@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import { StyledComponent } from "styled-components";
 import { noteData } from "./Note";
 
 type InlineEditProps = {
-  component: any;
+  component: StyledComponent<any, any, any, any>| string
   note: noteData;
   isInputActive: boolean;
   onSetNote: ({ data: text, type }: noteData) => void;
@@ -12,7 +13,7 @@ type InlineEditProps = {
 export type inlineData = { text: string };
 
 function InlineEdit(props: InlineEditProps) {
-  const textRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [inline, setInline] = useState<inlineData>({
     text: props.note.data.includes("text") ? (

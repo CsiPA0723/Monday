@@ -6,6 +6,7 @@ import "./components/Headbar/eventHandlers";
 import "./components/Food/eventHandlers";
 import "./views/Login/eventHandlers";
 import "./views/Notepad/eventHandlers";
+import "./views/Foods/eventHandlers";
 
 let activeUserUUID: string = null;
 

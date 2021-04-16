@@ -2,9 +2,9 @@ import React from 'react';
 import { Droppable } from "react-beautiful-dnd";
 import { inlineData } from "./InlineEdit";
 
-import Note, { noteTypesEnum } from "./Note";
+import Note, { noteTypes } from "./Note";
 
-export type noteData = { noteId: string, type: noteTypesEnum, data: string; };
+export type noteData = { noteId: string, type: noteTypes, data: string; };
 
 type NotesProps = {
   notesId: string;
@@ -62,7 +62,7 @@ function Notes(props: NotesProps) {
           newNotes.push({
             noteId: newNoteId,
             data: JSON.stringify({ text: "Edit me!" }),
-            type: noteTypesEnum.NOTE
+            type: noteTypes.NOTE
           });
           props.setNotes([...newNotes]);
         }}
