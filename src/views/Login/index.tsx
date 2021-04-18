@@ -15,10 +15,9 @@ function Login() {
       setLoginOrRegist("login");
     }
 
-    window.api.on("registerUser", initLogin);
-
+    const removeRegisterUser = window.api.on("registerUser", initLogin);
     return () => {
-      window.api.off("registerUser", initLogin);
+      if(removeRegisterUser) removeRegisterUser();
     };
   }, []);
 

@@ -10,10 +10,11 @@ type FoodProps = {
   onSetIsFocused: (value: boolean) => void;
 };
 
-export type foodData = { name: string, amount: string; };
+export type foodData = { id: number, name: string, amount: string; };
 
 function Food(props: FoodProps) {
   const [food, setFood] = useState<foodData>({
+    id: props.note.data.includes(nameof<foodData>(f => f.id)) ? (JSON.parse(props.note.data) as foodData).id : null,
     name: props.note.data.includes(nameof<foodData>(f => f.name)) ? (JSON.parse(props.note.data) as foodData).name : "",
     amount: props.note.data.includes(nameof<foodData>(f => f.amount)) ? (JSON.parse(props.note.data) as foodData).amount : ""
   });
@@ -25,16 +26,19 @@ function Food(props: FoodProps) {
   }, [food]);
 
   useEffect(() => {
-    console.log("sugg effect");
-    function handleGetFood(_, suggestedFoods: FoodStatic[]) {
-      console.log(suggestedFoods)
+    function handleGetSuggestedFoods(suggestedFoods: FoodStatic[]) {
       setSuggestions(suggestedFoods);
     }
+    function handleGetSelectedFood(foodData: FoodStatic) {
+      if(foodData && foodData.id === food.id) setSelectedFood(foodData);
+    }
 
-    window.api.on("getSuggestedFoods", handleGetFood);
+    window.api.send("getSelectedFood", food.id);
+    const removeGetSuggestedFoods = window.api.on("getSuggestedFoods", handleGetSuggestedFoods);
+    const removeGetSelectedFood = window.api.on("getSelectedFood", handleGetSelectedFood);
     return () => {
-      console.log("sugg effect off");
-      window.api.off("getSuggestedFoods", handleGetFood);
+      if(removeGetSuggestedFoods) removeGetSuggestedFoods();
+      if(removeGetSelectedFood) removeGetSelectedFood();
     };
   }, []);
 
@@ -45,7 +49,14 @@ function Food(props: FoodProps) {
           suggestions={suggestions}
           onSuggestionsFetchRequested={({ value }) => window.api.send("getSuggestedFoods", value)}
           onSuggestionsClearRequested={() => setSuggestions([])}
-          onSuggestionSelected={(_, { suggestion }) => setSelectedFood(suggestion)}
+          onSuggestionSelected={(_, { suggestion }) => {
+            setSelectedFood(suggestion);
+            setFood({
+              ...food,
+              id: suggestion.id,
+              name: suggestion.name
+            });
+          }}
           getSuggestionValue={suggestion => suggestion.name}
           renderSuggestion={suggestion => (<div>{suggestion.name}</div>)}
           inputProps={{

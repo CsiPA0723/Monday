@@ -14,27 +14,27 @@ function App() {
   const [userSettings, setUserSettings] = useState<UserSettingsStatic>(null);
 
   useEffect(() => {
-    function updateUserSettings(_, userSettings: UserSettingsStatic) {
+    function updateUserSettings(userSettings: UserSettingsStatic) {
       setUserSettings(userSettings);
     }
 
-    window.api.on("getUserSettings", updateUserSettings);
     window.api.send("getUserSettings");
+    const removeGetUserSettings = window.api.on("getUserSettings", updateUserSettings);
     return () => {
-      window.api.off("getUserSettings", updateUserSettings);
+      removeGetUserSettings();
     }
   }, [userId]);
 
   useEffect(() => {
-    function setTrueAuthenticated(_, userUUID: string) {
+    function setTrueAuthenticated(userUUID: string) {
       setUserId(userUUID);
       window.api.send("setActiveUser", userUUID);
     }
 
-    window.api.on("authenticated", setTrueAuthenticated);
     window.api.send("tryRememberMe");
+    const removeAuthenticated = window.api.on("authenticated", setTrueAuthenticated);
     return () => {
-      window.api.off("authenticated", setTrueAuthenticated);
+      if(removeAuthenticated) removeAuthenticated();
     }
   }, []);
   

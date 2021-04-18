@@ -30,7 +30,7 @@ function Notepad({ userId }: BasicViewProps) {
   useEffect(() => {
     window.api.send("getNotes", date, userId);
 
-    function handleGetNotes(_, stringData: string) {
+    function handleGetNotes(stringData: string) {
       const gotData = (JSON.parse(stringData) as notesData);
       const columnId = `notes-${formatDate(date)}_${userId}`;
       if (gotData.columnOrder.length === 0) {
@@ -52,10 +52,9 @@ function Notepad({ userId }: BasicViewProps) {
       setData({ ...data, ...gotData });
     }
 
-    window.api.on("getNotes", handleGetNotes);
-
+    const removeGetNotes = window.api.on("getNotes", handleGetNotes);
     return () => {
-      window.api.off("getNotes", handleGetNotes);
+      if(removeGetNotes) removeGetNotes();
     };
   }, [date]);
 

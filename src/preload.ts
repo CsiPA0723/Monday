@@ -17,6 +17,7 @@ const validSendChannels = [
     "getNotes",
 
     "getSuggestedFoods",
+    "getSelectedFood",
     "getFood",
     "setFood"
 ] as const;
@@ -30,7 +31,9 @@ const validOnChannels = [
     "getNotes",
 
     "getSuggestedFoods",
+    "getSelectedFood",
     "getFood",
+    "setFood"
 ] as const;
 
 
@@ -39,13 +42,14 @@ const api = {
         if(!validSendChannels.includes(channel)) return;
         ipcRenderer.send(channel, ...args);
     },
-    on(channel: typeof validOnChannels[number], listener: (event: IpcRendererEvent, ...args: any[]) => void) {
+    on(channel: typeof validOnChannels[number], listener: (...args: any[]) => void) {
         if(!validOnChannels.includes(channel)) return;
-        ipcRenderer.on(channel, listener);
-    },
-    off(channel: typeof validOnChannels[number], listener: (...args: any[]) => void) {
-        if(!validOnChannels.includes(channel)) return;
-        ipcRenderer.off(channel, listener);
+        // deliberately protect `event` as it includes `sender`
+        const subscription = (_: IpcRendererEvent, ...args: any[]) => listener(...args);
+        ipcRenderer.on(channel, subscription);
+        return () => {
+            ipcRenderer.removeListener(channel, subscription);
+        }
     }
 };
 
