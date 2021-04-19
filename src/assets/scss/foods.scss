@@ -1,78 +1,92 @@
 @use "colors";
 
 .foods {
-  .label-input-container {
+  .food-row {
     display: flex;
-    place-items: center;
-    text-align: center;
-    min-width: 440px;
-    max-width: 1400px;
-  
-    .label-input {
-      position: relative;
-      margin: auto;
-      padding: 4px;
-      width: 25%;
-      border: 1px solid colors.$input-border-bottom;
-    }
-  
-    // Looks like placeholder
-    label {
-      user-select: none;
-      opacity: 0.3;
-      font-weight: bold;
-      position: absolute;
-      top: 12px;
-      left: 20px;
-      color: colors.$text;
-    }
-  
-    input[type="text"] {
-      border: 0;
-      width: 100%;
-      padding: 10px;
-      background: colors.$background;
-      color: colors.$text;
-  
-      &:focus {
-        // removing default focus style
-        outline: 0;
-  
-        & + label {
-          opacity: 0;
-          z-index: -1;
+
+    .label-input-container {
+      display: flex;
+      place-items: center;
+      text-align: center;
+      min-width: 440px;
+      max-width: 1400px;
+    
+      .label-input {
+        position: relative;
+        margin: auto;
+        padding: 4px;
+        width: 25%;
+        border: 1px solid colors.$input-border-bottom;
+      }
+    
+      // Looks like placeholder
+      label {
+        user-select: none;
+        opacity: 0.3;
+        font-weight: bold;
+        left: 20px;
+        color: colors.$text;
+        pointer-events: none;
+      }
+    
+      input[type="text"] {
+        border: 0;
+        width: 100%;
+        background: colors.$background;
+        color: colors.$text;
+    
+        &:invalid:focus:not(:placeholder-shown) {
+          & ~ .requirements {
+            max-height: 200px;
+            padding: 0 30px 20px 50px;
+          }
         }
       }
-  
-      &:valid {
-        & + label {
-          opacity: 0;
-          z-index: -1;
-        }
-      }
-  
-      &:invalid:not(:focus):not(:placeholder-shown) {
-        & + label {
-          opacity: 0;
-          z-index: -1;
-        }
-      }
-  
-      &:invalid:focus:not(:placeholder-shown) {
-        & ~ .requirements {
-          max-height: 200px;
-          padding: 0 30px 20px 50px;
-        }
+    
+      .requirements {
+        padding: 0 30px 0 50px;
+        max-height: 0;
+        transition: 0.28s;
+        overflow: hidden;
+        color: colors.$error-text;
+        font-style: italic;
       }
     }
   
-    .requirements {
-      padding: 0 30px 0 50px;
-      max-height: 0;
-      transition: 0.28s;
-      overflow: hidden;
-      color: colors.$error-text;
-      font-style: italic;
+    .delete-food { 
+      color: colors.$title-button;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
     }
+    .delete-food:hover { color: colors.$title-close-button-hover-bg; }
+    .delete-food:active { color: colors.$title-close-button-active-bg; }
+  }
+
+  .add-food-button {
+    margin-top: 20px;
+    display: block;
+    color: colors.$title-button;
+    background-color: colors.$background;
+    border: 0;
+    border-radius: 1rem;
+    outline: none;
+    font-size: 1.2rem;
+  }
+  .add-food-button::before {
+    content: "+";
+    margin-right: 10px;
+    font-size: small;
+  }
+  .add-food-button::after {
+    content: "Add Food";
+    font-size: small;
+  }
+  .add-food-button:hover {
+    color: colors.$title-button-hover;
+  }
+  .add-food-button:active {
+    color: colors.$title-button-active;
   }
 }

@@ -38,6 +38,7 @@ div.login {
         top: 22px;
         left: 20px;
         color: colors.$text;
+        pointer-events: none;
       }
 
       > input[type="text"],

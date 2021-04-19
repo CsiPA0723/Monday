@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./assets/scss/app.scss";
+import "./assets/css/float-label.min.css" // Author: https://github.com/anydigital/float-label-css
 
 import SideBar from "./components/Sidebar";
 import Content from "./components/Content"

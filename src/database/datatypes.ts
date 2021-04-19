@@ -49,9 +49,9 @@ const BasicModel: ModelAttributes<BasicAttributes> = {
 }
 
 type MustAtUpdate = { id:string|number, updatedAt: string };
-type MakeSomePartial<T> = Omit<BuildStatic<T>, keyof Omit<BuildStatic<T>, keyof MustAtUpdate>> & Partial<Omit<BuildStatic<T>, keyof MustAtUpdate>>;
+type CustomPartial<T> = Omit<BuildStatic<T>, keyof Omit<BuildStatic<T>, keyof MustAtUpdate>> & Partial<Omit<BuildStatic<T>, keyof MustAtUpdate>>;
 
-type MakeThemNull<T> = {
+type PropNulls<T> = {
     [P in keyof T]: null;
 }
 
@@ -104,13 +104,13 @@ export abstract class Model<Attributes> {
      * @param excludeData - Set fields to null to exclude them from updating
      *  - Defaults to `{}`
      */
-    public upsert(data: BuildStatic<Attributes>, excludeData?: MakeThemNull<Partial<BuildStatic<Attributes>>>) {
+    public upsert(data: BuildStatic<Attributes>, excludeData?: PropNulls<Partial<BuildStatic<Attributes>>>) {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const propNames = Object.getOwnPropertyNames(data);
 
         const dataHasUserId = data.hasOwnProperty("userId");
 
-        const updateData: MakeThemNull<MakeSomePartial<Attributes>|MustAtUpdate> = {
+        const updateData: PropNulls<CustomPartial<Attributes>|MustAtUpdate> = {
             ...data,
             // Exclude fields in the update statement by setting them to null
             ...excludeData,
@@ -121,12 +121,12 @@ export abstract class Model<Attributes> {
         const stmtString = `
             INSERT INTO ${this.tableName} (${propNames}) VALUES (@${propNames.join(", @")})
             ON CONFLICT (id) DO UPDATE SET ${buildUpsertSetsFrom(updateData)} ${dataHasUserId ? "WHERE userId = @userId" : ""};
-        `.replace(/\\s{2,}/g, " ").trim();
+        `.replace(/\s{2,}/g, " ").trim();
         const stmt = this.database.prepare(stmtString);
         return stmt.run(data);
     }
 
-    public update(data: MakeSomePartial<Attributes>|MustAtUpdate, userId?: string) {
+    public update(data: CustomPartial<Attributes>|MustAtUpdate, userId?: string) {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const { id, ...restData } = (data as MustAtUpdate);
         const userIdCheck = userId ? `AND userId = ?` : "";

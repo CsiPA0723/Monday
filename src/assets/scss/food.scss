@@ -35,8 +35,9 @@
           z-index: 1000;
 
           &[class*="open"] { // suggetions list container open
-            padding: 4px;
             border: 1px solid colors.$input-border-bottom;
+            overflow-y: auto;
+            height: 20vh;
 
             ul { // suggetions list
               list-style: none;
@@ -65,6 +66,7 @@
           top: 22px;
           left: 20px;
           color: colors.$text;
+          pointer-events: none;
         }
 
         input[type="text"] {

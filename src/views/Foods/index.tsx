@@ -31,19 +31,9 @@ function Foods({ userId }: BasicViewProps) {
   return (
     <div className="foods">
       <h1>Foods</h1>
-      <div className="label-input-container">
-        {Object.getOwnPropertyNames(Array.from(foods.values())[0]||{}).slice(2, -2).map((propNames, index) => (
-          <div
-            key={index}
-            className="label-input"
-          >
-            {propNames[0].toUpperCase() + propNames.slice(1)}
-          </div>
-        ))}
-      </div>
-      {Array.from(foods.keys()).map((food, index) => (
+      {Array.from(foods.keys()).map((food) => (
         <Row 
-          key={index}
+          key={food}
           food={foods.get(food)}
           onFoodSet={food => {
             if(food.name.length === 0) {
@@ -55,7 +45,7 @@ function Foods({ userId }: BasicViewProps) {
         />
       ))}
       <button
-        className="add-note-button"
+        className="add-food-button"
         onClick={() => {
           window.api.send("setFood", ({
             id: null,
@@ -70,9 +60,7 @@ function Foods({ userId }: BasicViewProps) {
             createdAt: formatDate()
           } as FoodStatic))
         }}
-      >
-        Add Food
-      </button>
+      />
     </div>
   );
 }
@@ -90,9 +78,9 @@ function Row({food, onFoodSet}: RowProps) {
   useEffect(() => onFoodSet(foodData), [foodData]);
 
   return (
-    <div>
+    <div className="food-row">
       <div className="label-input-container">
-      {Object.getOwnPropertyNames(food||{}).slice(2, -2).map((propName, index) => (
+      {Object.getOwnPropertyNames(foodData||{}).slice(2, -2).map((propName, index) => (
         <Column
           key={index}
           name={propName[0].toLocaleUpperCase()+propName.slice(1)}
@@ -107,7 +95,7 @@ function Row({food, onFoodSet}: RowProps) {
     </div>
       <button
         type="button"
-        className="delete-note"
+        className="delete-food"
         onClick={() => onFoodSet({ ...foodData, name: "" })}
       >
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentcolor">
@@ -151,13 +139,13 @@ function Column({name, data, onTextSet}: ColumnProps) {
       if(esc) {
         setText(data);
         setIsFocused(false);
-        input.current.blur();
+        input.current.blur()
       }
     }
   }, [enter, esc])
 
   return (
-    <div ref={wrapper} className="label-input">
+    <div ref={wrapper} className="label-input has-float-label">
       <input
         ref={input}
         type="text"
@@ -165,8 +153,9 @@ function Column({name, data, onTextSet}: ColumnProps) {
         value={text}
         placeholder=" "
         required
-        onClick={() => setIsFocused(true)}
         onChange={e => setText(e.target.value)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
       />
       <label htmlFor={name}>{name}</label>
     </div>

@@ -10,19 +10,22 @@ type FoodProps = {
   onSetIsFocused: (value: boolean) => void;
 };
 
-export type foodData = { id: number, name: string, amount: string; };
+export type FoodData = { id: number, name: string, amount: string; };
 
 function Food(props: FoodProps) {
-  const [food, setFood] = useState<foodData>({
-    id: props.note.data.includes(nameof<foodData>(f => f.id)) ? (JSON.parse(props.note.data) as foodData).id : null,
-    name: props.note.data.includes(nameof<foodData>(f => f.name)) ? (JSON.parse(props.note.data) as foodData).name : "",
-    amount: props.note.data.includes(nameof<foodData>(f => f.amount)) ? (JSON.parse(props.note.data) as foodData).amount : ""
+  const [food, setFood] = useState<FoodData>({
+    id: props.note.data.includes(nameof<FoodData>(f => f.id)) ? (JSON.parse(props.note.data) as FoodData).id : null,
+    name: props.note.data.includes(nameof<FoodData>(f => f.name)) ? (JSON.parse(props.note.data) as FoodData).name : "",
+    amount: props.note.data.includes(nameof<FoodData>(f => f.amount)) ? (JSON.parse(props.note.data) as FoodData).amount : ""
   });
   const [suggestions, setSuggestions] = useState<FoodStatic[]>([]);
   const [selectedFood, setSelectedFood] = useState<FoodStatic>(null);
 
   useEffect(() => {
-    props.onSetNote({ ...props.note, data: JSON.stringify(food) });
+    props.onSetNote({
+      ...props.note,
+      data: JSON.stringify(food)
+    });
   }, [food]);
 
   useEffect(() => {
@@ -30,7 +33,11 @@ function Food(props: FoodProps) {
       setSuggestions(suggestedFoods);
     }
     function handleGetSelectedFood(foodData: FoodStatic) {
-      if(foodData && foodData.id === food.id) setSelectedFood(foodData);
+      console.log(foodData)
+      if(foodData && foodData.id === food.id) {
+        setSelectedFood(foodData);
+        setFood({...food, name: foodData.name});
+      }
     }
 
     window.api.send("getSelectedFood", food.id);
