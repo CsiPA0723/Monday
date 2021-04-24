@@ -1,5 +1,5 @@
 import React from 'react';
-import BasicViewProps from "../BasicViewProps";
+import BasicViewProps from "../../@types/views";
 
 function getGreeting() {
   const hours = new Date().getHours();

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FoodStatic } from "../../database/models/food";
-import BasicViewProps from "../BasicViewProps";
+import BasicViewProps from "../../@types/views";
 import "../../assets/scss/foods.scss";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import useKeyPress from "../../hooks/useKeyPress";

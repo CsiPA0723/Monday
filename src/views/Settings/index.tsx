@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "../../assets/scss/settings.scss";
 import { UserSettingsStatic } from "../../database/models/user_settings";
 import formatDate from "../../utils/formatDate";
-import BasicViewProps from "../BasicViewProps";
+import BasicViewProps from "../../@types/views";
 import DisplayName from "./components/DisplayName";
 import Password from "./components/Password";
 import Username from "./components/Username";

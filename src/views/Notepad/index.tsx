@@ -5,7 +5,7 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import Notes, { noteData } from "../../components/Notes";
 import { noteTypes } from "../../components/Note";
 import formatDate from "../../utils/formatDate";
-import BasicViewProps from "../BasicViewProps";
+import BasicViewProps from "../../@types/views";
 import { ReactComponent as ArrowLeft } from "../../assets/svgs/arrow_left.svg"
 import { ReactComponent as ArrowRight } from "../../assets/svgs/arrow_right.svg"
 
