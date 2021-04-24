@@ -30,7 +30,7 @@ export type ModelAttributes<T> = {
     }
 }
 
-export type BuildStatic<T> = T & BasicAttributes;
+export type BuildStatic<Attributes> = Attributes & BasicAttributes;
 
 type BasicAttributes = {
     createdAt: string;

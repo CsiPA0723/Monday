@@ -1,4 +1,4 @@
-import { BuildStatic, DataTypes, Model, ModelAttributes } from "../datatypes";
+import { BuildStatic, DataTypes, Model, ModelAttributes } from "../BasicModel";
 import { ColumnFactory } from "./column";
 import { UserFactory } from "./user";
 

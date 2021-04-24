@@ -1,4 +1,4 @@
-import { DataTypes, ModelAttributes } from "../database/datatypes";
+import { DataTypes, ModelAttributes } from "../database/BasicModel";
 
 export default function buildColumnsFrom(modelAttributes: ModelAttributes<any>) {
     let tableArrString: string[] = [];
