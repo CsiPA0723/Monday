@@ -29,6 +29,7 @@ const createWindow = (): void => {
             contextIsolation: true,
             enableRemoteModule: false,
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+            devTools: debug ? true : false
         },
         backgroundColor: "#363544"
     });
