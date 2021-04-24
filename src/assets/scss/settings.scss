@@ -1,0 +1,127 @@
+@use "colors";
+@use "variables";
+
+.settings {
+  .has-float-label {
+    padding: 4px;
+    input {
+      background-color: inherit;
+      color: inherit;
+      border-color: rgba($color: colors.$input-border-bottom, $alpha: 0.1);
+
+      &:focus {
+        border-color: rgba($color: colors.$input-border-bottom, $alpha: 1);
+      }
+    }
+    label {
+      color: inherit;
+      user-select: none;
+      font-weight: bold;
+      left: 20px;
+      pointer-events: none;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      &:invalid:not(:focus):not(:placeholder-shown) {
+        background: url(../svgs/error.svg);
+        background-size: 20px;
+        background-repeat: no-repeat;
+        background-position: 80px -2px;
+      }
+
+      &:invalid:focus:not(:placeholder-shown) {
+        & ~ .requirements {
+          max-height: 200px;
+        }
+      }
+    }
+
+    .requirements {
+      max-height: 0;
+      transition: 0.28s;
+      overflow: hidden;
+      color: colors.$error-text;
+      font-style: italic;
+      max-width: fit-content;
+    }
+  }
+
+  .category {
+    h2 {
+      text-align: center;
+    }
+  
+    hr {
+      border: 0;
+      height: 1px;
+      background-image: linear-gradient(
+        to right, rgba(255, 0, 0, 0), rgba($color: colors.$border, $alpha: 0.75), rgba(255, 0, 0, 0)
+      );
+      margin-bottom: 2rem;
+    }
+
+    .fields {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+
+      > div {
+        height: max-content;
+        width: max-content;
+        margin-right: auto;
+        position: relative;
+        border: 1px solid colors.$border;
+        padding: 1.15rem 1rem 0.25rem;
+
+        h3 {
+          position: absolute;
+          top: -35px;
+          left: 10px;
+          background-color: colors.$background;
+          padding: 4px;
+        }
+
+        @media screen and ( max-width: variables.$media-max-width ) {
+          margin: auto;
+          margin-top: 1rem;
+        }
+      }
+
+      .pass-wrapper {
+        display: flex;
+        flex-direction: column;
+        
+        .error {
+          color: colors.$error-text;
+          font-style: italic;
+        }
+
+        i {
+          margin-left: 1rem;
+          svg { width: 1.25rem; }
+          :hover {
+            color: colors.$password-eye-hover;
+            cursor: pointer;
+          }
+        }
+
+        button {
+          display: block;
+          width: 100%;
+          margin: 10px 0 4px;
+          background: colors.$button-active-bg;
+          color: colors.$button;
+          border: 0;
+          padding: 4px;
+          font-size: 1.2rem;
+        }
+      }
+
+      @media screen and ( max-width: variables.$media-max-width ) {
+        flex-direction: column;
+        justify-content: space-evenly;
+      }
+    }
+  }
+}

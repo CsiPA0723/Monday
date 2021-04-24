@@ -33,7 +33,6 @@ function Food(props: FoodProps) {
       setSuggestions(suggestedFoods);
     }
     function handleGetSelectedFood(foodData: FoodStatic) {
-      console.log(foodData)
       if(foodData && foodData.id === food.id) {
         setSelectedFood(foodData);
         setFood({...food, name: foodData.name});

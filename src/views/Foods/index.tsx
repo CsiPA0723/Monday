@@ -135,11 +135,12 @@ function Column({name, data, onTextSet}: ColumnProps) {
       if(enter) {
         onTextSet(name.toLowerCase(), text.toString());
         setIsFocused(false);
+        input.current.blur();
       }
       if(esc) {
         setText(data);
         setIsFocused(false);
-        input.current.blur()
+        input.current.blur();
       }
     }
   }, [enter, esc])

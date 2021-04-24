@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/scss/login.scss";
 
 function Login() {
@@ -8,6 +10,7 @@ function Login() {
     rememberMe: false,
   });
 
+  const [passwordShown, setPasswordShown] = useState(false);
   const [loginOrRegist, setLoginOrRegist] = useState<"login" | "regist">("login");
 
   useEffect(() => {
@@ -43,7 +46,7 @@ function Login() {
           </div>
           <div>
             <input
-              type="password"
+              type={passwordShown ? "text" : "password"}
               id="password"
               name="password"
               placeholder=" "
@@ -51,6 +54,12 @@ function Login() {
               onChange={(e) => setDetails({ ...details, password: e.target.value })}
             />
             <label htmlFor="password">Password</label>
+            <i key={0}>
+              <FontAwesomeIcon
+                icon={passwordShown ? faEyeSlash : faEye}
+                onClick={() => setPasswordShown(!passwordShown)}
+              />
+            </i>
           </div>
           <div>
             <input
@@ -94,7 +103,7 @@ function Login() {
           </div>
           <div>
             <input
-              type="password"
+              type={passwordShown ? "text" : "password"}
               id="password"
               name="password"
               placeholder=" "
@@ -103,6 +112,12 @@ function Login() {
               onChange={(e) => setDetails({ ...details, password: e.target.value })}
             />
             <label htmlFor="password">Password</label>
+            <i key={0}>
+              <FontAwesomeIcon
+                icon={passwordShown ? faEyeSlash : faEye}
+                onClick={() => setPasswordShown(!passwordShown)}
+              />
+            </i>
             <div className="requirements">
               Your password must be at least 6 characters as well as contain at
               least one uppercase, one lowercase, and one number.

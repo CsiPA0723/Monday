@@ -18,14 +18,16 @@
     padding: 16px;
     border: none;
     outline: none;
-  }
-  button.active {
-    background-color: colors.$button-active-bg;
-  }
-  button:hover:not(.active) {
-    background-color: colors.$button-hover-bg;
-  }
 
+    &:hover {
+      background-color: colors.$button-hover-bg;
+    }
+
+    &.active, &:active {
+      background-color: colors.$button-active-bg;
+    }
+  }
+  
   @media screen and (max-width: variables.$media-max-width) {
     width: 100%;
     height: auto;

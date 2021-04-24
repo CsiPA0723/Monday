@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./assets/scss/app.scss";
 import "./assets/css/float-label.min.css" // Author: https://github.com/anydigital/float-label-css
+import { UserSettingsStatic } from "./database/models/user_settings";
 
 import SideBar from "./components/Sidebar";
 import Content from "./components/Content"
 import Login from "./views/Login";
-import { UserSettingsStatic } from "./database/models/user_settings";
 
-type Views = "Calendar"|"Home"|"Notepad"|"User";
+type Views = "About"|"Foods"|"Home"|"Notepad"|"Settings";
 
 function App() {
   const [view, setView] = useState<Views>("Home");
@@ -15,30 +15,32 @@ function App() {
   const [userSettings, setUserSettings] = useState<UserSettingsStatic>(null);
 
   useEffect(() => {
-    function updateUserSettings(userSettings: UserSettingsStatic) {
-      setUserSettings(userSettings);
+    function updateUserSettings(gotUserSettings: UserSettingsStatic) {
+      setUserSettings(gotUserSettings);
     }
 
-    window.api.send("getUserSettings");
     const removeGetUserSettings = window.api.on("getUserSettings", updateUserSettings);
+    const removeSetUserSettings = window.api.on("setUserSettings", updateUserSettings);
     return () => {
-      removeGetUserSettings();
+      if(removeGetUserSettings) removeGetUserSettings();
+      if(removeSetUserSettings) removeSetUserSettings();
     }
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
-    function setTrueAuthenticated(userUUID: string) {
+    function setAuthenticated(userUUID: string) {
       setUserId(userUUID);
       window.api.send("setActiveUser", userUUID);
     }
-
+    
     window.api.send("tryRememberMe");
-    const removeAuthenticated = window.api.on("authenticated", setTrueAuthenticated);
+    const removeAuthenticated = window.api.on("authenticated", setAuthenticated);
     return () => {
       if(removeAuthenticated) removeAuthenticated();
     }
   }, []);
   
+  useEffect(() => window.api.send("getUserSettings"), [userId]);
 
   if(userId) {
     return (
@@ -47,7 +49,7 @@ function App() {
         <Content view={view} userId={userId} userSettings={userSettings}/>
       </div>
     );
-  } else return <><Login /></>;
+  } else return <Login />;
 }
 
 export default App;

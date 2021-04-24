@@ -7,13 +7,17 @@ type ContentProps = {
   view: string
 } & BasicViewProps;
 
-function Content({ view, userId, userSettings }: ContentProps) {
+function Content({ view, ...restProps }: ContentProps) {
   const [page, setPage] = useState(null);
   
   useEffect(() => {
     async function loadView() {
-      const View = await importView(view);
-      setPage(<View userId={userId} usesSettings={userSettings} />);
+      try {
+        const View = await importView(view);
+        setPage(<View {...restProps}/>);
+      } catch (error) {
+        console.error(error);
+      }
     }
     loadView();
   }, [view]);

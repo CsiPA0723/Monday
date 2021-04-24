@@ -22,6 +22,7 @@ function SideBar({ view, setView }: SideBarProps) {
       <SideBarButton id="Foods" onClick={() => {setView("Foods");handleActiveButton();}}/>
       <SideBarButton id="Settings" onClick={() => {setView("Settings");handleActiveButton();}}/>
       <SideBarButton id="About" onClick={() => {setView("About");handleActiveButton();}}/>
+      <SideBarButton id="Logout" onClick={() => {window.api.send("logout")}}/>
     </div>
   );
 }

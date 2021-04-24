@@ -7,6 +7,8 @@ import "./components/Food/eventHandlers";
 import "./views/Login/eventHandlers";
 import "./views/Notepad/eventHandlers";
 import "./views/Foods/eventHandlers";
+import "./views/Settings/eventHandlers";
+import formatDate from "./utils/formatDate";
 
 let activeUserUUID: string = null;
 
@@ -20,7 +22,7 @@ ipcMain.on("getActiveUser", async (event) => {
     }
 });
 
-ipcMain.on("setActiveUser", async (_, userUUID: string) => {
+ipcMain.on("setActiveUser", async (_event, userUUID: string) => {
     activeUserUUID = userUUID;
 });
 
@@ -33,10 +35,20 @@ ipcMain.on("getUserSettings", async (event) => {
     }
 });
 
-ipcMain.on("setUserSettings", async (_, userSettings: UserSettingsStatic) => {
+ipcMain.on("setUserSettings", async (event, userSettings: UserSettingsStatic) => {
     try {
-        UserSettings.update(userSettings);
+        UserSettings.upsert(userSettings);
+        event.reply("setUserSettings", userSettings);
     } catch (error) {
         dialog.showErrorBox((error as Error)?.name, (error as Error)?.stack);
     }
+});
+
+ipcMain.on("logout", (event) => {
+    User.update({
+        id: activeUserUUID,
+        updatedAt: formatDate(),
+        remember_me: 0
+    });
+    event.reply("authenticated", null);
 });

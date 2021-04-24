@@ -10,7 +10,7 @@ ipcMain.on("authenticate", (event, username: string, password: string, rememberM
         const user = User.find([{username}]);
         if(!user) return dialog.showErrorBox("Login Failed", "Username or Password not matching!");
         const key = crypto.pbkdf2Sync(password, user.id, 1000, 512, "sha512");
-        if(key.toLocaleString() === user.password.toLocaleString()) {
+        if(key.toString() === user.password.toString()) {
             if(user.remember_me !== rememberMe) {
                 user.remember_me = rememberMe;
                 User.update({

@@ -99,6 +99,19 @@ div.login {
         color: colors.$error-text;
         font-style: italic;
       }
+
+      i {
+        position: absolute;
+        background-color: colors.$background;
+        top: 22px;
+        right: 10px;
+        margin-left: 1rem;
+        svg { width: 1.25rem; }
+        :hover {
+          color: colors.$password-eye-hover;
+          cursor: pointer;
+        }
+      }
     }
 
     :last-child {
