@@ -1,6 +1,6 @@
 import { DataTypes, ModelAttributes } from "../database/BasicModel";
 
-export default function buildColumnsFrom(modelAttributes: ModelAttributes<any>) {
+export default function buildColumnsFrom<T>(modelAttributes: ModelAttributes<T>) {
     let tableArrString: string[] = [];
     let foreignKeys: string[] = [];
     let foreignReferences: string[] = [];

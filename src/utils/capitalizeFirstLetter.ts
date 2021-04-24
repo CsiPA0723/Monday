@@ -1,5 +1,3 @@
-import { app } from "electron";
-
-export default function capitalizeFirstLetter([ first, ...rest ]: any, locale = app.getLocale()) {
+export default function capitalizeFirstLetter([ first, ...rest ]: string, locale?: string) {
     return [ first.toLocaleUpperCase(locale), ...rest ].join('');
 }

@@ -7,6 +7,7 @@ import InlineEdit from "./InlineEdit";
 import Food from "./Food";
 import { ReactComponent as DeleteIcon } from "../assets/svgs/backspace_black_24dp.svg";
 import { ReactComponent as DragHandle } from "../assets/svgs/draghandle.svg";
+import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 
 export type NoteProps = {
   noteId: string;
@@ -63,7 +64,7 @@ function createNoteTypeOptions() {
   noteTypeMap.forEach((_, noteType) => {
     array.push({
       value: noteType.toUpperCase(),
-      text: noteType[0].toUpperCase()+noteType.slice(1)
+      text: capitalizeFirstLetter(noteType)
     });
   });
   return array;

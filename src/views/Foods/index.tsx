@@ -6,6 +6,7 @@ import useOnClickOutside from "../../hooks/useOnClickOutside";
 import useKeyPress from "../../hooks/useKeyPress";
 import formatDate from "../../utils/formatDate";
 import { ReactComponent as DeleteIcon } from "../../assets/svgs/delete.svg";
+import capitalizeFirstLetter from "../../utils/capitalizeFirstLetter";
 
 function Foods({ userId }: BasicViewProps) {
   const [foods, setFoods] = useState<Map<number, FoodStatic>>(new Map());
@@ -84,7 +85,7 @@ function Row({food, onFoodSet}: RowProps) {
       {Object.getOwnPropertyNames(foodData||{}).slice(2, -2).map((propName, index) => (
         <Column
           key={index}
-          name={propName[0].toLocaleUpperCase()+propName.slice(1)}
+          name={capitalizeFirstLetter(propName)}
           data={foodData[propName]}
           onTextSet={(name, value) => {
             const newState = Object.assign({}, foodData);
