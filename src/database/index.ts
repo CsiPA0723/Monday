@@ -12,10 +12,10 @@ import randomBackupCode from "../utils/randomBackupCode";
 import formatDate from "../utils/formatDate";
 import { noteTypes } from "../components/Note";
 
-const isDebug = process.argv.some(v => /--dev/.test(v)); // npm run debug
-const sqltiteFile = path.join(process.resourcesPath, "database.sqlite");
+const isDebug = process.argv.some(v => /--dev/.test(v)); // npm run dev
+const sqliteFile = path.join(process.env.NODE_ENV === "development" ? __dirname : process.resourcesPath, "database.sqlite");
 
-export const database = new Sqlite(sqltiteFile, { verbose: isDebug ? console.log : null });
+export const database = new Sqlite(sqliteFile, { verbose: isDebug ? console.log : null });
 database.pragma("synchronous = 1");
 database.pragma("journal_mode = wal");
 database.pragma("foreign_keys = 1");

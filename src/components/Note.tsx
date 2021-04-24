@@ -5,6 +5,8 @@ import useKeyPress from "../hooks/useKeyPress";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import InlineEdit from "./InlineEdit";
 import Food from "./Food";
+import { ReactComponent as DeleteIcon } from "../assets/svgs/backspace_black_24dp.svg";
+import { ReactComponent as DragHandle } from "../assets/svgs/draghandle.svg";
 
 export type NoteProps = {
   noteId: string;
@@ -127,9 +129,7 @@ function Note(props: NoteProps) {
               {...provided.dragHandleProps}
               hidden={isFocused}
             >
-              <svg width="7" height="11" viewBox="0 0 7 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd" d="M0 1.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 8a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM1.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM4 1.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 8a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM5.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" fill="#72767d"></path>
-              </svg>
+              <DragHandle fill="currentColor"/>
             </div>
             {note.type !== noteTypes.FOOD ? (
                 <InlineEdit
@@ -154,10 +154,7 @@ function Note(props: NoteProps) {
               hidden={!isInputActive}
               onClick={() => props.onSetNote({data: "", type: null})}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentcolor">
-                <path d="M0 0h24v24H0V0z" fill="none"/>
-                <path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"/>
-              </svg>
+              <DeleteIcon fill="currentColor"/>
             </button>
           </Container>
         )}

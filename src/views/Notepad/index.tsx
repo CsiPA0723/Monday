@@ -6,6 +6,8 @@ import Notes, { noteData } from "../../components/Notes";
 import { noteTypes } from "../../components/Note";
 import formatDate from "../../utils/formatDate";
 import BasicViewProps from "../BasicViewProps";
+import { ReactComponent as ArrowLeft } from "../../assets/svgs/arrow_left.svg"
+import { ReactComponent as ArrowRight } from "../../assets/svgs/arrow_right.svg"
 
 export type notesData = {
   columns: {
@@ -98,10 +100,7 @@ function Notepad({ userId }: BasicViewProps) {
             setDate(formatDate(dDate));
           }}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 0 24 24" width="48px" fill="currentcolor">
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
-          </svg>
+          <ArrowLeft fill="currentColor"/>
         </div>
         <input
           type="date"
@@ -119,10 +118,7 @@ function Notepad({ userId }: BasicViewProps) {
             setDate(formatDate(dDate));
           }}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 0 24 24" width="48px" fill="currentcolor">
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-          </svg>
+          <ArrowRight fill="currentColor"/>
         </div>
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>

@@ -28,7 +28,7 @@ module.exports = [
     }
   },
   {
-    test: /\.s[ac]ss$/i,
+    test: /\.s[ac]ss$/,
     use: [
       "style-loader",
       "css-loader",
@@ -37,11 +37,16 @@ module.exports = [
   },
   {
     test: /\.svg$/,
-    use: {
-      loader: 'svg-url-loader',
-      options: {
-        limit: 10000
+    use: [
+      {
+        loader: "@svgr/webpack"
+      },
+      {
+        loader: "svg-url-loader",
+        options: {
+          limit: 10000
+        }
       }
-    }
+    ]
   }
 ];
