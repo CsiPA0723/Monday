@@ -1,6 +1,7 @@
 @use "colors";
 @use "variables";
 @use "food";
+@use "weight";
 
 #notepad {
   padding: 4px;
@@ -89,6 +90,7 @@
     }
 
     @include food.foodMixin;
+    @include weight.weightMixin;
   }
 
   .add-note-button {

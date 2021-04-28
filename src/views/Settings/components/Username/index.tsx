@@ -17,8 +17,8 @@ function Username({ userId }: UsernameProps) {
     const removeGetUsername = window.api.on("getUsername", handleUsername);
     const removeSetUsername = window.api.on("setUsername", handleUsername);
     return () => {
-      if(removeGetUsername) removeGetUsername();
-      if(removeSetUsername) removeSetUsername();
+      removeGetUsername?.();
+      removeSetUsername?.();
     };
   }, []);
 

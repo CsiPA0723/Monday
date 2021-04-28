@@ -67,12 +67,13 @@
           left: 20px;
           color: colors.$text;
           pointer-events: none;
+          user-select: none;
         }
 
         input[type="text"] {
           width: $inputWidth;
           border: 0;
-          padding: 20px;
+          padding: 20px 20px 20px 50px;
           background: colors.$background;
           color: colors.$text;
 
@@ -87,6 +88,11 @@
           }
 
           &:valid {
+            background: url(../svgs/check.svg);
+            background-size: 20px;
+            background-repeat: no-repeat;
+            background-position: 20px 20px;
+
             & + label {
               opacity: 0;
               z-index: -1;
@@ -94,6 +100,11 @@
           }
 
           &:invalid:not(:focus):not(:placeholder-shown) {
+            background: url(../svgs/error.svg);
+            background-size: 20px;
+            background-repeat: no-repeat;
+            background-position: 20px 20px;
+            
             & + label {
               opacity: 0;
               z-index: -1;
@@ -110,6 +121,7 @@
 
         .requirements {
           padding: 0 30px 0 50px;
+          max-width: fit-content;
           max-height: 0;
           transition: 0.28s;
           overflow: hidden;

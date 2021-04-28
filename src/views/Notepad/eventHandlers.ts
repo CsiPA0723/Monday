@@ -2,6 +2,7 @@ import { dialog, ipcMain } from "electron";
 import { noteTypes } from "../../components/Note";
 import { Column, Note } from "../../database";
 import formatDate from "../../utils/formatDate";
+import noteColumnId from "../../utils/noteColumnId";
 
 import { notesData } from "./";
 
@@ -12,7 +13,7 @@ ipcMain.on("getNotes", (event, date: string, userId: string) => {
             columnOrder: []
         };
         
-        const column = Column.findByPk(`notes-${date}_${userId}`);
+        const column = Column.findByPk(noteColumnId.make("notes", date, userId));
         if(!column) return event.reply("getNotes", JSON.stringify(data));
         const notes = Note.findAll([{column_id: column.id}]);
         if(!notes) return event.reply("getNotes", JSON.stringify(data));

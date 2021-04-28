@@ -1,0 +1,30 @@
+@use "colors";
+
+@mixin weightMixin {
+  .weight {
+    padding: 10px;
+    margin-left: 10px;
+    border: 1px solid colors.$border;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+
+    label {
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .has-float-label {
+      padding: 4px;
+      input {
+        background-color: inherit;
+        color: inherit;
+        border-color: rgba($color: colors.$input-border-bottom, $alpha: 0.1);
+    
+        &:focus {
+          border-color: rgba($color: colors.$input-border-bottom, $alpha: 1);
+        }
+      }
+    }
+  }
+}

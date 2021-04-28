@@ -4,7 +4,6 @@ import formatDate from "../../../../utils/formatDate";
 
 ipcMain.on("getUsername", (event, userId: string) => {
   try {
-    console.log(userId);
     const user = User.findByPk(userId);
     if(!user) throw new Error("User not found in database");
     event.reply("getUsername", user.username);

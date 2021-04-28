@@ -1,14 +1,15 @@
 import { dialog, ipcMain } from "electron";
 import { User, UserSettings } from "./database";
 import { UserSettingsStatic } from "./database/models/user_settings";
+import formatDate from "./utils/formatDate";
 
 import "./components/Headbar/eventHandlers";
 import "./components/Food/eventHandlers";
 import "./views/Login/eventHandlers";
+import "./views/Home/eventHandlers";
 import "./views/Notepad/eventHandlers";
 import "./views/Foods/eventHandlers";
 import "./views/Settings/eventHandlers";
-import formatDate from "./utils/formatDate";
 
 let activeUserUUID: string = null;
 

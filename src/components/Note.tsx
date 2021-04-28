@@ -8,6 +8,7 @@ import Food from "./Food";
 import { ReactComponent as DeleteIcon } from "../assets/svgs/backspace_black_24dp.svg";
 import { ReactComponent as DragHandle } from "../assets/svgs/draghandle.svg";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
+import Weight from "./Weight";
 
 export type NoteProps = {
   noteId: string;
@@ -34,8 +35,7 @@ export enum noteTypes {
   NOTE = "note",
   TITLE = "title",
   FOOD = "food",
-  // SPORT = "sport",
-  // TASK = "task"
+  WEIGHT = "weight",
 };
 
 const noteTypeMap = new Map([
@@ -55,8 +55,7 @@ const noteTypeMap = new Map([
     `
   ],
   [noteTypes.FOOD, styled.div``],
-  // [noteTypesEnum.SPORT, styled.div``],
-  // [noteTypesEnum.TASK, styled.div``],
+  [noteTypes.WEIGHT, styled.div``],
 ]);
 
 function createNoteTypeOptions() {
@@ -132,7 +131,28 @@ function Note(props: NoteProps) {
             >
               <DragHandle fill="currentColor"/>
             </div>
-            {note.type !== noteTypes.FOOD ? (
+            {(() => {
+              if(note.type === noteTypes.FOOD) {
+                return (
+                  <Food
+                    note={note}
+                    isInputActive={isInputActive}
+                    onSetNote={(note) => setNote(note)}
+                    onSetIsFocused={(v) => setIsFocused(v)}
+                  />
+                );
+              }
+              if(note.type === noteTypes.WEIGHT) {
+                return (
+                  <Weight
+                    note={note}
+                    isInputActive={isInputActive}
+                    onSetNote={(note) => setNote(note)}
+                    onSetIsFocused={(v) => setIsFocused(v)}
+                  />
+                );
+              }
+              return (
                 <InlineEdit
                   component={noteTypeMap.has(note.type) ? noteTypeMap.get(note.type) : "div"}
                   note={note}
@@ -140,15 +160,8 @@ function Note(props: NoteProps) {
                   onSetNote={(note) => setNote(note)}
                   onSetIsFocused={(v) => setIsFocused(v)}
                 />
-              ) : (
-                <Food
-                  note={note}
-                  isInputActive={isInputActive}
-                  onSetNote={(note) => setNote(note)}
-                  onSetIsFocused={(v) => setIsFocused(v)}
-                />
-              )
-            }
+              );
+            })()}
             <button
               type="button"
               className="delete-note"

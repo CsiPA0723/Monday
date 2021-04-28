@@ -25,8 +25,8 @@ function Foods({ userId }: BasicViewProps) {
     const removeGetFood = window.api.on("getFood", handleGetFood);
     const removeSetFood = window.api.on("setFood", handleSetFoodResponse);
     return () => {
-      if(removeGetFood) removeGetFood();
-      if(removeSetFood) removeSetFood();
+      removeGetFood?.();
+      removeSetFood?.();
     };
   }, []);
 
@@ -103,8 +103,6 @@ function Row({food, onFoodSet}: RowProps) {
         <DeleteIcon fill="currentColor"/>
       </button>
     </div>
-    
-    
   );
 }
 

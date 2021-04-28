@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import AutoSuggest from "react-autosuggest";
 import { noteData } from "../Note";
 import { FoodStatic } from "../../database/models/food";
+import Convert from "convert";
+import regExpPatterns from "../../utils/regExpPatterns";
+
 
 type FoodProps = {
   note: noteData;
@@ -35,7 +38,11 @@ function Food(props: FoodProps) {
     function handleGetSelectedFood(foodData: FoodStatic) {
       if(foodData && foodData.id === food.id) {
         setSelectedFood(foodData);
-        setFood({...food, name: foodData.name});
+        setFood({
+          ...food,
+          name: foodData.name,
+          ...(!regExpPatterns.foodAmount.test(food.amount) ? { amount: "100g" } : null)
+        });
       }
     }
 
@@ -43,8 +50,8 @@ function Food(props: FoodProps) {
     const removeGetSuggestedFoods = window.api.on("getSuggestedFoods", handleGetSuggestedFoods);
     const removeGetSelectedFood = window.api.on("getSelectedFood", handleGetSelectedFood);
     return () => {
-      if(removeGetSuggestedFoods) removeGetSuggestedFoods();
-      if(removeGetSelectedFood) removeGetSelectedFood();
+      removeGetSuggestedFoods?.();
+      removeGetSelectedFood?.();
     };
   }, []);
 
@@ -72,7 +79,7 @@ function Food(props: FoodProps) {
             placeholder: " ",
             required: true,
             value: food.name,
-            onClick: () => props.onSetIsFocused(true),
+            onFocus: () => props.onSetIsFocused(true),
             onChange: (_, change) => setFood({ ...food, name: change.newValue })
           }}
           renderInputComponent={(props) => (
@@ -90,10 +97,14 @@ function Food(props: FoodProps) {
             placeholder=" "
             required
             value={food.amount}
-            onClick={() => props.onSetIsFocused(true)}
+            pattern={regExpPatterns.foodAmount.source}
+            onFocus={() => props.onSetIsFocused(true)}
             onChange={e => setFood({ ...food, amount: e.target.value })}
           />
           <label htmlFor="amount">Amount</label>
+          <div className="requirements">
+            Must have at least one number and the unit!
+          </div>
         </div>
       </div>
       <div className="FCP-container">

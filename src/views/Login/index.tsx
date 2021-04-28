@@ -20,7 +20,7 @@ function Login() {
 
     const removeRegisterUser = window.api.on("registerUser", initLogin);
     return () => {
-      if(removeRegisterUser) removeRegisterUser();
+      removeRegisterUser?.();
     };
   }, []);
 

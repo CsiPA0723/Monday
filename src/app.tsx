@@ -3,6 +3,9 @@ import "./assets/scss/app.scss";
 import "./assets/css/float-label.min.css" // Author: https://github.com/anydigital/float-label-css
 import { UserSettingsStatic } from "./database/models/user_settings";
 
+import { Chart, registerables } from "chart.js";
+Chart.register(...registerables);
+
 import SideBar from "./components/Sidebar";
 import Content from "./components/Content"
 import Login from "./views/Login";
@@ -22,8 +25,8 @@ function App() {
     const removeGetUserSettings = window.api.on("getUserSettings", updateUserSettings);
     const removeSetUserSettings = window.api.on("setUserSettings", updateUserSettings);
     return () => {
-      if(removeGetUserSettings) removeGetUserSettings();
-      if(removeSetUserSettings) removeSetUserSettings();
+      removeGetUserSettings?.();
+      removeSetUserSettings?.();
     }
   }, []);
 
@@ -36,7 +39,7 @@ function App() {
     window.api.send("tryRememberMe");
     const removeAuthenticated = window.api.on("authenticated", setAuthenticated);
     return () => {
-      if(removeAuthenticated) removeAuthenticated();
+      removeAuthenticated?.();
     }
   }, []);
   

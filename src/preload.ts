@@ -26,6 +26,8 @@ const validChannels = [
     "getSelectedFood",
     "getFood",
     "setFood",
+
+    "getChartData",
 ] as const;
 
 

@@ -11,6 +11,7 @@ import crypto from "crypto";
 import randomBackupCode from "../utils/randomBackupCode";
 import formatDate from "../utils/formatDate";
 import { noteTypes } from "../components/Note";
+import noteColumnId from "../utils/noteColumnId";
 
 const isDebug = process.argv.some(v => /--dev/.test(v)); // npm run dev
 const sqliteFile = path.join(process.env.NODE_ENV === "development" ? __dirname : process.resourcesPath, "database.sqlite");
@@ -38,7 +39,7 @@ export function debug() {
         updatedAt: formatDate()
     }).object;
     const column = Column.create({
-        id: `notes-${formatDate()}_${user.id}`,
+        id: noteColumnId.make("notes", formatDate(), user.id),
         id_order: "",
         title: "notes",
         user_id: user.id,
@@ -85,7 +86,7 @@ export function debug() {
         updatedAt: formatDate()
     }).object;
     const column1 = Column.create({
-        id: `notes-${formatDate()}_${user1.id}`,
+        id: noteColumnId.make("notes", formatDate(), user1.id),
         id_order: "",
         title: "notes",
         user_id: user1.id,

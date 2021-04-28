@@ -8,6 +8,7 @@ import formatDate from "../../utils/formatDate";
 import BasicViewProps from "../../@types/views";
 import { ReactComponent as ArrowLeft } from "../../assets/svgs/arrow_left.svg"
 import { ReactComponent as ArrowRight } from "../../assets/svgs/arrow_right.svg"
+import noteColumnId from "../../utils/noteColumnId";
 
 export type notesData = {
   columns: {
@@ -34,7 +35,7 @@ function Notepad({ userId }: BasicViewProps) {
 
     function handleGetNotes(stringData: string) {
       const gotData = (JSON.parse(stringData) as notesData);
-      const columnId = `notes-${formatDate(date)}_${userId}`;
+      const columnId = noteColumnId.make("notes", date, userId);
       if (gotData.columnOrder.length === 0) {
         gotData.columns[columnId] = {
           id: columnId,
@@ -56,7 +57,7 @@ function Notepad({ userId }: BasicViewProps) {
 
     const removeGetNotes = window.api.on("getNotes", handleGetNotes);
     return () => {
-      if(removeGetNotes) removeGetNotes();
+      removeGetNotes?.();
     };
   }, [date]);
 
