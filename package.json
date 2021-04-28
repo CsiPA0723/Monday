@@ -1,7 +1,7 @@
 {
   "name": "monday",
   "productName": "Monday",
-  "version": "0.1.12",
+  "version": "0.1.17",
   "description": "Assistance to daily life for a programer",
   "main": ".webpack/main",
   "scripts": {
