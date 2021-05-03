@@ -26,16 +26,16 @@ export type ModelAttributes<T> = {
         references?: {
             table: string,
             foreignKey: string,
-        }
+        };
     }
-}
+};
 
 export type BuildStatic<Attributes> = Attributes & BasicAttributes;
 
 type BasicAttributes = {
     createdAt: string;
     updatedAt: string;
-}
+};
 
 const BasicModel: ModelAttributes<BasicAttributes> = {
     createdAt: {
@@ -46,14 +46,14 @@ const BasicModel: ModelAttributes<BasicAttributes> = {
         type: DataTypes.DATETIME,
         allowNull: false
     }
-}
+};
 
-type MustAtUpdate = { id:string|number, updatedAt: string };
+type MustAtUpdate = { id: string | number, updatedAt: string; };
 type CustomPartial<T> = Omit<BuildStatic<T>, keyof Omit<BuildStatic<T>, keyof MustAtUpdate>> & Partial<Omit<BuildStatic<T>, keyof MustAtUpdate>>;
 
-type PropNulls<T> = {
-    [P in keyof T]: null;
-}
+type PartialNulls<T> = {
+    [P in keyof T]+?: null;
+};
 
 export abstract class Model<Attributes> {
     public abstract tableName: string;
@@ -68,13 +68,13 @@ export abstract class Model<Attributes> {
         return this.database.prepare(`SELECT * FROM ${this.tableName} WHERE id = ?;`).get(primaryKey);
     }
 
-    public deleteByPk(primaryKey: string|number): any {
+    public deleteByPk(primaryKey: string | number): any {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         return this.database.prepare(`DELETE FROM ${this.tableName} WHERE id = ?;`).run(primaryKey);
     }
 
     /** @param whereClause - `[{foo: foo}, "AND", {bar: bar}, "OR", {fooBar: foo.bar}]` */
-    public find(whereClause: Array<Partial<Attributes>|"OR"|"AND"|"NOT">): BuildStatic<Attributes> {
+    public find(whereClause: Array<Partial<Attributes> | "OR" | "AND" | "NOT">): BuildStatic<Attributes> {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const { data, whereString } = buildWhereClauseFrom(whereClause);
         const stmtString = `SELECT * FROM ${this.tableName} WHERE ${whereString};`;
@@ -83,7 +83,7 @@ export abstract class Model<Attributes> {
     }
 
     /** @param whereClause - `[{foo: foo}, "AND", {bar: bar}, "OR", {fooBar: foo.bar}]` */
-    public findAll(whereClause: Array<Partial<Attributes>|"OR"|"AND"|"NOT">): BuildStatic<Attributes>[] {
+    public findAll(whereClause: Array<Partial<Attributes> | "OR" | "AND" | "NOT">): BuildStatic<Attributes>[] {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const { data, whereString } = buildWhereClauseFrom(whereClause);
         const stmtString = `SELECT * FROM ${this.tableName} WHERE ${whereString};`;
@@ -104,13 +104,13 @@ export abstract class Model<Attributes> {
      * @param excludeData - Set fields to null to exclude them from updating
      *  - Defaults to `{}`
      */
-    public upsert(data: BuildStatic<Attributes>, excludeData?: PropNulls<Partial<BuildStatic<Attributes>>>) {
+    public upsert(data: BuildStatic<Attributes>, excludeData?: PartialNulls<BuildStatic<Attributes>>) {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const propNames = Object.getOwnPropertyNames(data);
 
         const dataHasUserId = data.hasOwnProperty("userId");
 
-        const updateData: PropNulls<CustomPartial<Attributes>|MustAtUpdate> = {
+        const updateData: PartialNulls<CustomPartial<Attributes> | MustAtUpdate> = {
             ...data,
             // Exclude fields in the update statement by setting them to null
             ...excludeData,
@@ -126,7 +126,7 @@ export abstract class Model<Attributes> {
         return stmt.run(data);
     }
 
-    public update(data: CustomPartial<Attributes>|MustAtUpdate, userId?: string) {
+    public update(data: CustomPartial<Attributes> | MustAtUpdate, userId?: string) {
         if(this.isNotDefined) throw new Error("Model is not defined!");
         const { id, ...restData } = (data as MustAtUpdate);
         const userIdCheck = userId ? `AND userId = ?` : "";
