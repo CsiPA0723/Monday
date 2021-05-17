@@ -1,26 +1,25 @@
-import { ChartData, DefaultDataPoint } from "chart.js";
+import { ChartData } from "chart.js";
 import { dialog, ipcMain } from "electron";
 import { FoodData } from "../../components/Food";
 import { noteTypes } from "../../components/Note";
 import { Food, Note } from "../../database";
-import Convert from "convert";
 import noteColumnId from "../../utils/noteColumnId";
 import { NoteStatic } from "../../database/models/note";
-import regExpPatterns from "../../utils/regExpPatterns";
 import { WeightData } from "../../components/Weight";
+import foodConvert from "../../utils/foodConvert";
 
 const sorting = (a: NoteStatic, b: NoteStatic) => {
   const aDate = new Date(noteColumnId.split(a.column_id).date);
   const bDate = new Date(noteColumnId.split(b.column_id).date);
-  return aDate.getTime() - bDate.getTime()
-}
+  return aDate.getTime() - bDate.getTime();
+};
 
 type mappedDataType = {
   kcal: number,
   proteins: number,
   fats: number,
   carbs: number,
-  weight: number
+  weight: number;
 };
 
 ipcMain.on("getChartData", (event, userId: string) => {
@@ -29,7 +28,7 @@ ipcMain.on("getChartData", (event, userId: string) => {
       labels: [],
       datasets: []
     };
-    const notes = Note.findAll([{user_id: userId}, "AND", {type: noteTypes.FOOD}, "OR", {type: noteTypes.WEIGHT}]);
+    const notes = Note.findAll([{ user_id: userId }, "AND", { type: noteTypes.FOOD }, "OR", { type: noteTypes.WEIGHT }]);
 
     if(notes) {
       const mapedData = new Map<string, mappedDataType>();
@@ -41,14 +40,7 @@ ipcMain.on("getChartData", (event, userId: string) => {
           const data: FoodData = JSON.parse(note.data);
           const food = Food.findByPk(data.id);
           if(!food) continue;
-          const [, dataAmount, dataUnit] = regExpPatterns.foodAmount.exec(data.amount)||[null, 100, "g"];
-          const [, foodAmount, foodUnit] = regExpPatterns.foodAmount.exec(food.amount)||[null, 100, "g"];
-          const convAmount = Convert(Number(dataAmount)).from((dataUnit as any)).to((foodUnit as any));
-          const modifier = convAmount / Number(foodAmount);
-          const kcal = food.kcal * modifier;
-          const proteins = food.proteins * modifier;
-          const fats = food.fats * modifier;
-          const carbs = food.carbs * modifier;
+          const { carbs, fats, kcal, proteins } = foodConvert(food, data.amount, food.amount);
           const prevData = mapedData.get(date);
           mapedData.set(date, {
             ...prevData,
@@ -136,7 +128,7 @@ ipcMain.on("getChartData", (event, userId: string) => {
     }
     chartData.labels = Array.from(new Set(chartData.labels));
     event.reply("getChartData", chartData);
-  } catch (error) {
+  } catch(error) {
     dialog.showErrorBox((error as Error)?.name, (error as Error)?.stack);
   }
 });

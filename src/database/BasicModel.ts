@@ -121,7 +121,7 @@ export abstract class Model<Attributes> {
         const stmtString = `
             INSERT INTO ${this.tableName} (${propNames}) VALUES (@${propNames.join(", @")})
             ON CONFLICT (id) DO UPDATE SET ${buildUpsertSetsFrom(updateData)} ${dataHasUserId ? "WHERE userId = @userId" : ""};
-        `.replace(/\s{2,}/g, " ").trim();
+        `.replace(/(\s{2,})|(\t{1,})/g, " ").trim();
         const stmt = this.database.prepare(stmtString);
         return stmt.run(data);
     }

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import AutoSuggest from "react-autosuggest";
 import { noteData } from "../Note";
 import { FoodStatic } from "../../database/models/food";
-import Convert from "convert";
 import regExpPatterns from "../../utils/regExpPatterns";
-
+import foodConvert from "../../utils/foodConvert";
 
 type FoodProps = {
   note: noteData;
@@ -23,6 +22,7 @@ function Food(props: FoodProps) {
   });
   const [suggestions, setSuggestions] = useState<FoodStatic[]>([]);
   const [selectedFood, setSelectedFood] = useState<FoodStatic>(null);
+  const [calcedFoodData, setCalcedFoodData] = useState<ReturnType<typeof foodConvert>>(null);
 
   useEffect(() => {
     props.onSetNote({
@@ -32,9 +32,16 @@ function Food(props: FoodProps) {
   }, [food]);
 
   useEffect(() => {
+    if(selectedFood && regExpPatterns.foodAmount.test(food.amount)) {
+      setCalcedFoodData(foodConvert(selectedFood, food.amount, selectedFood.amount));
+    }
+  }, [selectedFood]);
+
+  useEffect(() => {
     function handleGetSuggestedFoods(suggestedFoods: FoodStatic[]) {
       setSuggestions(suggestedFoods);
     }
+
     function handleGetSelectedFood(foodData: FoodStatic) {
       if(foodData && foodData.id === food.id) {
         setSelectedFood(foodData);
@@ -80,6 +87,7 @@ function Food(props: FoodProps) {
             required: true,
             value: food.name,
             onFocus: () => props.onSetIsFocused(true),
+            onBlur: () => props.onSetIsFocused(false),
             onChange: (_, change) => setFood({ ...food, name: change.newValue })
           }}
           renderInputComponent={(props) => (
@@ -99,7 +107,13 @@ function Food(props: FoodProps) {
             value={food.amount}
             pattern={regExpPatterns.foodAmount.source}
             onFocus={() => props.onSetIsFocused(true)}
-            onChange={e => setFood({ ...food, amount: e.target.value })}
+            onBlur={() => props.onSetIsFocused(false)}
+            onChange={e => {
+              setFood({ ...food, amount: e.target.value });
+              if(regExpPatterns.foodAmount.test(e.target.value) && selectedFood) {
+                setCalcedFoodData(foodConvert(selectedFood, e.target.value, selectedFood.amount));
+              }
+            }}
           />
           <label htmlFor="amount">Amount</label>
           <div className="requirements">
@@ -108,11 +122,11 @@ function Food(props: FoodProps) {
         </div>
       </div>
       <div className="FCP-container">
-        <div>{`${selectedFood ? selectedFood.fats : "..."} Fats`}</div>
-        <div>{`${selectedFood ? selectedFood.carbs : "..."} Carbs`}</div>
-        <div>{`${selectedFood ? selectedFood.proteins : "..."} Proteins`}</div>
+        <div>{`${calcedFoodData ? calcedFoodData.fats : "..."} Fats`}</div>
+        <div>{`${calcedFoodData ? calcedFoodData.carbs : "..."} Carbs`}</div>
+        <div>{`${calcedFoodData ? calcedFoodData.proteins : "..."} Proteins`}</div>
       </div>
-      <div className="kcal">{`${selectedFood ? selectedFood.kcal : "..."} kcal`}</div>
+      <div className="kcal">{`${calcedFoodData ? calcedFoodData.kcal : "..."} kcal`}</div>
     </div>
   );
 }
